@@ -65,7 +65,7 @@ public class About extends JDialog {
 		JLabel label = new JLabel("Application: " + frame.getTitle());
 		centerPanel.add( label );
 		centerPanel.add( Box.createVerticalStrut( 10 ) );
-		label = new JLabel("Version: @@version@@");
+		label = new JLabel("Version: @@VERSION@@");
 		centerPanel.add( label );
 		for(int i=0; i<configs.length; i++){
 			centerPanel.add( Box.createHorizontalStrut( 10 ) );

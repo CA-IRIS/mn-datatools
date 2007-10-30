@@ -11,8 +11,8 @@
 	<property name="etc.dir" value="etc" />
 	<property name="lib.dir" value="lib" />
 	<property name="docs.dir" value="docs" />
-	<property name="html.images" value="docs/images" />
 	<property name="build.dir" value="build" />
+	<property name="build.docs.dir" value="${build.dir}/docs" />
 	<property name="build.lib" value="${build.dir}/lib" />
 	<property name="build.src.dir" value="${build.dir}/src" />
 	<property name="build.etc.dir" value="${build.dir}/etc" />
@@ -46,8 +46,8 @@
 	<!-- Prepares the build directory                                        -->
 	<!-- ========================================================== -->
 	<target name="prepare" description="Creates the build directory.">
-		<echo>Application host: "${datatools.app.server}"</echo>
-		<echo>Data host:        "${datatools.data.server}"</echo>
+		<echo>Application host: "${datatools.webstart.host}"</echo>
+		<echo>Data host:        "${datatools.trafdat.host}"</echo>
 		<mkdir dir="${build.lib}" />
 		<mkdir dir="${build.classes.dir}" />
 		<mkdir dir="${build.src.dir}" />
@@ -57,6 +57,10 @@
 			<filterset begintoken="@@" endtoken="@@">
 				<filter token="VERSION" value="${version}" />
 				<filter token="NAME" value="${name}" />
+				<filter token="DATATOOLS.WEBSTART.HOST"
+					value="${datatools.webstart.host}" />
+				<filter token="DATATOOLS.TRAFDAT.HOST"
+					value="${datatools.trafdat.host}" />
 			</filterset>
 		</copy>
 		<copy todir="${build.etc.dir}" filtering="true">
@@ -64,6 +68,21 @@
 			<filterset begintoken="@@" endtoken="@@">
 				<filter token="VERSION" value="${version}" />
 				<filter token="NAME" value="${name}" />
+				<filter token="DATATOOLS.WEBSTART.HOST"
+					value="${datatools.webstart.host}" />
+				<filter token="DATATOOLS.TRAFDAT.HOST"
+					value="${datatools.trafdat.host}" />
+			</filterset>
+		</copy>
+		<copy todir="${build.docs.dir}" filtering="true">
+			<fileset dir="${docs.dir}" />
+			<filterset begintoken="@@" endtoken="@@">
+				<filter token="VERSION" value="${version}" />
+				<filter token="NAME" value="${name}" />
+				<filter token="DATATOOLS.WEBSTART.HOST"
+					value="${datatools.webstart.host}" />
+				<filter token="DATATOOLS.TRAFDAT.HOST"
+					value="${datatools.trafdat.host}" />
 			</filterset>
 		</copy>
 	</target>
@@ -105,9 +124,6 @@
 	<!-- ========================================================== -->
 	<target name="dist" depends="jar" description="Creates the distribution directory and copies all
                          needed files.">
-		<copy todir="${build.dist.dir}/images">
-			<fileset dir="${html.images}" />
-		</copy>
 		<copy todir="${build.dist.dir}/lib">
 			<fileset dir="${lib.dir}" />
 		</copy>
@@ -115,10 +131,15 @@
 			<fileset dir="${build.lib}" />
 		</copy>
 		<copy todir="${build.dist.dir}">
-			<fileset dir="${docs.dir}">
+			<fileset dir="${build.docs.dir}">
 				<include name="**/*.html" />
 				<include name="**/*.jnlp" />
 				<include name="**/*.css" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dist.dir}/images">
+			<fileset dir="${build.docs.dir}/images">
+				<include name="*" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dist.dir}">
@@ -132,7 +153,10 @@
 				<include name="*.jar" />
 			</fileset>
 		</signjar>
-		<zip basedir="." destfile="${build.dir}/${name}-${version}.zip" includes="${build.dist.dir}/**/*.*" />
+		<zip
+			basedir="."
+			destfile="${build.dir}/${name}-${version}.zip"
+			includes="${build.dist.dir}/**/*.*" />
 	</target>
 
 

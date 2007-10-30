@@ -2,7 +2,7 @@
    <!-- JNLP File for DataPlot Application -->
    <jnlp
      spec="1.0"
-     codebase="http://@@app_server@@/datatools"
+     codebase="http://@@DATATOOLS.WEBSTART.HOST@@/@@NAME@@"
      href="DataPlot.jnlp">
      <information>
        <title>Data Plot</title>
@@ -14,7 +14,7 @@
      </information>
      <resources>
        <j2se version="1.5+"/>
-       <jar href="lib/data_tools-@@version@@.jar"/>
+       <jar href="lib/@@NAME@@-@@VERSION@@.jar"/>
        <jar href="lib/mail.jar"/>
        <jar href="lib/activation.jar"/>
      </resources>
@@ -23,7 +23,7 @@
      </security>
      <application-desc main-class="us.mn.state.dot.data.Main">
        <argument>-s</argument>
-       <argument>http://@@data_server@@:8080/trafdat</argument>
+       <argument>http://@@DATATOOLS.TRAFDAT.HOST@@:8080/trafdat</argument>
        <argument>-a</argument>
        <argument>DataPlot</argument>
      </application-desc>
