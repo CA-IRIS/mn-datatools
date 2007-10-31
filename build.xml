@@ -40,6 +40,9 @@
 		<antcall target="check-jar">
 			<param name="file.jar" value="jnlp.jar" />
 		</antcall>
+		<antcall target="check-jar">
+			<param name="file.jar" value="junit-4.4.jar" />
+		</antcall>
 	</target>
 
 	<!-- ========================================================== -->
