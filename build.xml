@@ -40,6 +40,10 @@
 		<antcall target="check-jar">
 			<param name="file.jar" value="jnlp.jar" />
 		</antcall>
+	</target>
+
+	<!-- Check for unit test dependancies -->
+	<target name="check-test" depends="check">
 		<antcall target="check-jar">
 			<param name="file.jar" value="junit-4.4.jar" />
 		</antcall>
@@ -94,8 +98,14 @@
 	<!-- Compiles the source code                                            -->
 	<!-- ========================================================== -->
 	<target name="compile" depends="check,prepare" description="Compiles all of the source files for the project.">
-		<javac destdir="${build.classes.dir}" debug="off" deprecation="on" optimize="on" source="1.5" target="1.5">
-			<src path="${build.src.dir}" />
+		<javac destdir="${build.classes.dir}"
+			excludes="us/mn/state/dot/data/test/**"
+			debug="off"
+			deprecation="on"
+			optimize="on"
+			source="1.5"
+			target="1.5"
+			srcdir="${build.src.dir}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
@@ -128,7 +138,7 @@
 	<target name="dist" depends="jar" description="Creates the distribution directory and copies all
                          needed files.">
 		<copy todir="${build.dist.dir}/lib">
-			<fileset dir="${lib.dir}" />
+			<fileset dir="${lib.dir}" excludes="junit*.jar"/>
 		</copy>
 		<copy todir="${build.dist.dir}/lib">
 			<fileset dir="${build.lib}" />
@@ -171,37 +181,31 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<!-- ========================================================= -->
-	<!-- compile the unit test classes                             -->
-	<!-- ========================================================= -->
-	<target name="compile-test" depends="prepare">
-		<javac destdir="${build.classes.dir}" srcdir="${src.dir}" verbose="${TALK}">
-			<classpath>
-				<pathelement path="${build.classes.dir}" />
-			</classpath>
+	<!-- ========================================================== -->
+	<!-- Compiles the source code including unit test classes       -->
+	<!-- ========================================================== -->
+	<target name="compile-test" depends="check-test,prepare"
+		description="Compiles all of the source files for the project.">
+		<javac destdir="${build.classes.dir}"
+			debug="off"
+			deprecation="on"
+			optimize="on"
+			source="1.5"
+			target="1.5"
+			srcdir="${build.src.dir}">
+			<classpath refid="classpath" />
 		</javac>
-	</target>
-
-	<!-- ========================================================= -->
-	<!-- clean up the unit test classes                            -->
-	<!-- ========================================================= -->
-	<target name="clean-test">
-		<delete verbose="${TALK}">
-			<fileset dir="${src.dir}" includes="**/*.class" />
-		</delete>
 	</target>
 
 	<!-- ========================================================= -->
 	<!-- run the unit tests                                        -->
 	<!-- ========================================================= -->
-	<target name="test" depends="compile, compile-test">
+	<target name="test" depends="compile-test">
 		<junit haltonfailure="true" printsummary="true">
-			<classpath>
-				<pathelement path="${build.classes.dir}" />
-			</classpath>
+			<classpath refid="classpath"/>
 			<formatter type="brief" usefile="false" />
 			<batchtest>
-				<fileset dir="${build.classes.dir}" includes="**/*Test.class" />
+				<fileset dir="${build.classes.dir}" includes="**/*Tests.class" />
 			</batchtest>
 		</junit>
 	</target>

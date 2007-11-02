@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package us.mn.state.dot.data.extract;
+package us.mn.state.dot.data.test;
 
 import java.net.URL;
 import java.util.Calendar;
@@ -41,7 +41,7 @@ public class Test {
 			SystemConfig[] configs = new SystemConfig[1];
 			configs[0] = new TmsConfig("RTMC", url);
 			HttpDataFactory fact = new HttpDataFactory(
-				"http://tms-iris-bk:8080/trafdat", configs);
+				"http://@@DATATOOLS.TRAFDAT.HOST@@:8080/trafdat", configs);
 			PlotDetector d1 = PlotDetector.createPlotDetector( fact, "D1788" );
 			PlotDetector d2 = PlotDetector.createPlotDetector( fact, "D1789" );
 			Sensor[] sensors = new Sensor[2];
