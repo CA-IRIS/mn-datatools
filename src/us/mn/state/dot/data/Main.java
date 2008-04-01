@@ -1,6 +1,6 @@
 /*
  * DataTools
- * Copyright (C) 2004-2007  Minnesota Department of Transportation
+ * Copyright (C) 2004-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data;
 
@@ -30,7 +26,6 @@ import us.mn.state.dot.data.plot.DataPlot;
  * forwards them to the appropriate application
  * 
  * @author <a href="mailto:timothy.a.johnson@dot.state.mn.us">Tim Johnson </a>
- * @version $Revision: 1.20 $ $Date: 2006/02/09 13:32:28 $
  */
 public class Main {
 
@@ -130,9 +125,8 @@ public class Main {
 			} else if (application.equals(DATAEXTRACT)) {
 				new DataExtract(factory, cfgs, factLocation);
 			}
-		} catch (InstantiationException ie) {
-			ie.printStackTrace();
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

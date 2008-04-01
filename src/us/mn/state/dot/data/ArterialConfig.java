@@ -1,6 +1,6 @@
 /*
  * DataExtract
- * Copyright (C) 2004-2007  Minnesota Department of Transportation
+ * Copyright (C) 2004-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package us.mn.state.dot.data;
 
 import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
-
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,9 +26,11 @@ import org.w3c.dom.NodeList;
  * @author john3tim
  *
  */
-public class ArterialConfig extends SystemConfig{
+public class ArterialConfig extends SystemConfig {
 
-	public ArterialConfig(String name, URL url)throws InstantiationException{
+	public ArterialConfig(String name, URL url)
+		throws ParserConfigurationException
+	{
 		super(name, url);
 	}
 

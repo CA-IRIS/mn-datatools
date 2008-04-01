@@ -1,6 +1,6 @@
 /*
- * Project: Video
- * Copyright (C) 2007  Minnesota Department of Transportation
+ * Project: DataTools
+ * Copyright (C) 2007-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data;
 
@@ -27,6 +23,7 @@ import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -35,26 +32,31 @@ import org.w3c.dom.NodeList;
 /** Parser for GZIP'd xml files */
 public class XmlParser {
 
-	protected Document document;
+	protected final Document document;
 	
-	protected URL url = null;
-	
-	public XmlParser(URL url) throws InstantiationException {
+	protected final URL url;
+
+	/** Create a new XML document parser */
+	public XmlParser(URL url) throws ParserConfigurationException {
 		this.url = url;
-		try{
-			DocumentBuilder builder =
-				DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		document = parse();
+	}
+
+	/** Parse the XML document */
+	protected Document parse() throws ParserConfigurationException {
+		DocumentBuilder builder =
+			DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		try {
 			URLConnection conn = url.openConnection();
 			InputStream in = conn.getInputStream();
-			document = builder.parse(new GZIPInputStream(in));
-		}catch(Exception e){
-			try{
-				DocumentBuilder builder =
-					DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			return builder.parse(new GZIPInputStream(in));
+		} catch(Exception e) {
+			try {
 				URLConnection conn = url.openConnection();
-				document = builder.parse(conn.getInputStream());
-			}catch(Exception e2){
-				throw new InstantiationException(e.getMessage());
+				return builder.parse(conn.getInputStream());
+			} catch(Exception e2) {
+				e2.printStackTrace();
+				return builder.newDocument();
 			}
 		}
 	}
