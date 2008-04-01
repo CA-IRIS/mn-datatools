@@ -14,22 +14,20 @@
  */
 package us.mn.state.dot.data;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-/** Parser for GZIP'd xml files */
+/**
+ * Parser for GZIP'd xml files
+ *
+ * @author Tim Johnson, Doug Lau
+ */
 public class XmlParser {
 
 	protected final Document document;
@@ -50,22 +48,24 @@ public class XmlParser {
 			URLConnection conn = url.openConnection();
 			InputStream in = conn.getInputStream();
 			return builder.parse(new GZIPInputStream(in));
-		} catch(Exception e) {
+		}
+		catch(Exception e) {
 			try {
 				URLConnection conn = url.openConnection();
 				return builder.parse(conn.getInputStream());
-			} catch(Exception e2) {
+			}
+			catch(Exception e2) {
 				e2.printStackTrace();
 				return builder.newDocument();
 			}
 		}
 	}
 
-	public URL getURL(){
+	public URL getURL() {
 		return url;
 	}
 
-	public Document getDocument(){
+	public Document getDocument() {
 		return document;
 	}
 }
