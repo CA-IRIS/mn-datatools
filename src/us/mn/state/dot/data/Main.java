@@ -24,7 +24,7 @@ import us.mn.state.dot.data.plot.DataPlot;
 /**
  * Main starting point for data tools. Processes command line parameters and
  * forwards them to the appropriate application
- * 
+ *
  * @author <a href="mailto:timothy.a.johnson@dot.state.mn.us">Tim Johnson </a>
  */
 public class Main {
@@ -49,37 +49,37 @@ public class Main {
 	public Main (String[] args) {
 		setProxy();
 		parseArgs(args);
-    	launchApp();
-    }
+		launchApp();
+	}
 
-	protected void setProxy(){
+	protected void setProxy() {
 		Properties p = System.getProperties();
 		p.setProperty("proxyHost", "proxy.dot.state.mn.us");
 		p.setProperty("proxyPort", "3128");
 		p.setProperty("proxySet", "true");
 	}
-	
+
 	protected void parseArgs(String args[]) {
 		server = null;
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-s") && i < (args.length - 1)) {
+		for(int i = 0; i < args.length; i++) {
+			if(args[i].equals("-s") && i < (args.length - 1)) {
 				server = args[i + 1];
-			} else if (args[i].equals("-d") && i < (args.length - 1)) {
+			} else if(args[i].equals("-d") && i < (args.length - 1)) {
 				dataRoot = args[i + 1];
 			}
 		}
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-a") && i < (args.length - 1)) {
+		for(int i = 0; i < args.length; i++) {
+			if(args[i].equals("-a") && i < (args.length - 1)) {
 				application = args[i + 1].toLowerCase();
 				break;
 			}
 		}
-		if (application == null) {
+		if(application == null) {
 			printHelp();
 			System.exit(-1);
 		}
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-h")) {
+		for(int i = 0; i < args.length; i++) {
+			if(args[i].equals("-h")) {
 				printHelp();
 				System.exit(-1);
 			}
@@ -106,25 +106,24 @@ public class Main {
 			URL url =
 				new URL("http://data.dot.state.mn.us/dds/arterials.xml.gz");
 			cfgs[0] = new ArterialConfig("Arterials", url);
-			url = 
+			url =
 				new URL("http://data.dot.state.mn.us/dds/tms_config.xml.gz");
 			cfgs[1] = new TmsConfig("RTMC", url);
 			url =
 				new URL("http://data.dot.state.mn.us/dds/tms-rochester.xml.gz");
 			cfgs[2] = new TmsConfig("Rochester", url);
 			String factLocation = null;
-			if (server != null) {
+			if(server != null) {
 				factory = new HttpDataFactory(server, cfgs);
 				factLocation = server;
 			} else {
 				factory = new LocalDataFactory(dataRoot, cfgs);
 				factLocation = dataRoot;
 			}
-			if (application.equals(DATAPLOT)) {
+			if(application.equals(DATAPLOT))
 				new DataPlot(factory, cfgs, factLocation);
-			} else if (application.equals(DATAEXTRACT)) {
+			else if(application.equals(DATAEXTRACT))
 				new DataExtract(factory, cfgs, factLocation);
-			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
