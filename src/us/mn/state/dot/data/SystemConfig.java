@@ -33,7 +33,7 @@ public abstract class SystemConfig extends XmlParser {
 	protected final String name;
 	protected final Element system;
 	protected String detectorPrefix = "";
-	
+
 	public SystemConfig(String name, URL url)
 		throws ParserConfigurationException
 	{
@@ -48,20 +48,16 @@ public abstract class SystemConfig extends XmlParser {
 			timeStamp = "not available";
 	}
 
-	public Sensor getSensor(String id){
+	public Sensor getSensor(String id) {
 		return (Sensor)sensors.get(id);
 	}
 
-	public String getTimeStamp(){
+	public String getTimeStamp() {
 		return timeStamp;
 	}
-	
-	public String getStationLabel( int stationId ){
-//		StationRecord record = (StationRecord)stationMap.get( Integer.toString( stationId ) );
-//		if( record == null ){
-			return null;
-//		}
-//		return record.getLabel();
+
+	public String getStationLabel(int stationId) {
+		return null;
 	}
 
 	public String getName() {

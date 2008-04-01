@@ -34,21 +34,20 @@ public class ArterialConfig extends SystemConfig {
 		super(name, url);
 	}
 
-	public Set<SystemNode> getZones(SystemTree tree){
+	public Set<SystemNode> getZones(SystemTree tree) {
 		NodeList zList = document.getElementsByTagName("zone");
 		Set zones = new TreeSet<SystemNode>(new NodeComparator());
-		for(int i=0; i<zList.getLength(); i++){
+		for(int i = 0; i < zList.getLength(); i++)
 			zones.add(createZone((Element)zList.item(i), tree));
-		}
 		return zones;
 	}
-		
-	protected SystemNode createZone(Element e, SystemTree tree){
+
+	protected SystemNode createZone(Element e, SystemTree tree) {
 		SystemNode z = new SystemNode(e, tree);
 		NodeList dList = e.getChildNodes();
-		for(int i=0; i<dList.getLength(); i++){
+		for(int i = 0; i < dList.getLength(); i++) {
 			Node n = dList.item(i);
-			if(n instanceof Element){
+			if(n instanceof Element) {
 				SystemNode d = new SystemNode((Element)n, tree);
 				z.add(d);
 			}
