@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
 public class XmlParser {
 
 	protected final Document document;
-	
+
 	protected final URL url;
 
 	/** Create a new XML document parser */
@@ -64,25 +64,8 @@ public class XmlParser {
 	public URL getURL(){
 		return url;
 	}
-	
-	protected void printElements(Document d){
-		NodeList list = d.getChildNodes();
-		printNodeList(list);
-	}
-	
-	protected void printNodeList(NodeList list){
-		for(int i=0; i<list.getLength(); i++){
-			Node n = list.item(i);
-			print(n);
-			printNodeList(n.getChildNodes());
-		}
-	}
 
 	public Document getDocument(){
 		return document;
-	}
-
-	protected void print(Node n){
-		System.out.println("Node: " + n.getNodeName());
 	}
 }
