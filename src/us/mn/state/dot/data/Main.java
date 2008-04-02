@@ -34,8 +34,8 @@ public class Main {
 	private final String DATAEXTRACT = "dataextract";
 
 	/**
-	 * Default location where the traffic files can be found when using a local
-	 * data factory
+	 * Default location where the traffic files can be found when using a
+	 * local data factory
 	 */
 	protected String DEFAULT_DATA_ROOT = File.separator + "traffic";
 
@@ -45,8 +45,8 @@ public class Main {
 
 	protected String application = null;
 
-	/** Creates a new instance of Main */
-	public Main (String[] args) {
+	/** Create a new instance of Main */
+	public Main(String[] args) throws Exception {
 		setProxy();
 		parseArgs(args);
 		launchApp();
@@ -62,11 +62,10 @@ public class Main {
 	protected void parseArgs(String args[]) {
 		server = null;
 		for(int i = 0; i < args.length; i++) {
-			if(args[i].equals("-s") && i < (args.length - 1)) {
+			if(args[i].equals("-s") && i < (args.length - 1))
 				server = args[i + 1];
-			} else if(args[i].equals("-d") && i < (args.length - 1)) {
+			else if(args[i].equals("-d") && i < (args.length - 1))
 				dataRoot = args[i + 1];
-			}
 		}
 		for(int i = 0; i < args.length; i++) {
 			if(args[i].equals("-a") && i < (args.length - 1)) {
@@ -99,42 +98,41 @@ public class Main {
 				"  -d : Location ( path ) of local traffic data archives.");
 	}
 
-	private void launchApp() {
+	private void launchApp() throws Exception {
+		DataFactory factory = null;
+		SystemConfig[] cfgs = new SystemConfig[3];
+		URL url =
+			new URL("http://data.dot.state.mn.us/dds/arterials.xml.gz");
+		cfgs[0] = new ArterialConfig("Arterials", url);
+		url =
+			new URL("http://data.dot.state.mn.us/dds/tms_config.xml.gz");
+		cfgs[1] = new TmsConfig("RTMC", url);
+		url =
+			new URL("http://data.dot.state.mn.us/dds/tms-rochester.xml.gz");
+		cfgs[2] = new TmsConfig("Rochester", url);
+		String factLocation = null;
+		if(server != null) {
+			factory = new HttpDataFactory(server, cfgs);
+			factLocation = server;
+		} else {
+			factory = new LocalDataFactory(dataRoot, cfgs);
+			factLocation = dataRoot;
+		}
+		if(application.equals(DATAPLOT))
+			new DataPlot(factory, cfgs, factLocation);
+		else if(application.equals(DATAEXTRACT))
+			new DataExtract(factory, cfgs, factLocation);
+	}
+
+	/**
+	 * @param args the command line arguments
+	 */
+	static public void main(String args[]) {
 		try {
-			DataFactory factory = null;
-			SystemConfig[] cfgs = new SystemConfig[3];
-			URL url =
-				new URL("http://data.dot.state.mn.us/dds/arterials.xml.gz");
-			cfgs[0] = new ArterialConfig("Arterials", url);
-			url =
-				new URL("http://data.dot.state.mn.us/dds/tms_config.xml.gz");
-			cfgs[1] = new TmsConfig("RTMC", url);
-			url =
-				new URL("http://data.dot.state.mn.us/dds/tms-rochester.xml.gz");
-			cfgs[2] = new TmsConfig("Rochester", url);
-			String factLocation = null;
-			if(server != null) {
-				factory = new HttpDataFactory(server, cfgs);
-				factLocation = server;
-			} else {
-				factory = new LocalDataFactory(dataRoot, cfgs);
-				factLocation = dataRoot;
-			}
-			if(application.equals(DATAPLOT))
-				new DataPlot(factory, cfgs, factLocation);
-			else if(application.equals(DATAEXTRACT))
-				new DataExtract(factory, cfgs, factLocation);
+			new Main(args);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String args[]) {
-		new Main(args);
 	}
 }
