@@ -14,6 +14,7 @@
  */
 package us.mn.state.dot.data;
 
+import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
 import org.w3c.dom.Document;
@@ -27,8 +28,8 @@ import org.w3c.dom.NodeList;
  */
 public class ArterialConfig extends SystemConfig {
 
-	public ArterialConfig(Document doc) {
-		super(doc);
+	public ArterialConfig(URL url, Document doc) {
+		super(url, doc);
 	}
 
 	public Set<SystemNode> getZones(SystemTree tree) {

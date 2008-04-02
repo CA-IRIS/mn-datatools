@@ -14,6 +14,7 @@
  */
 package us.mn.state.dot.data;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +57,8 @@ public class TmsConfig extends SystemConfig {
 		new HashMap<String, Element>();
 
 	/** Create a new TMS config */
-	public TmsConfig(Document doc) {
-		super(doc);
+	public TmsConfig(URL url, Document doc) {
+		super(url, doc);
 		loadDetectorElements();
 		loadCorridorElements();
 		loadStationElements();

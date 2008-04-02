@@ -30,6 +30,8 @@ abstract public class SystemConfig {
 	protected final Hashtable<String, Sensor> sensors =
 		new Hashtable<String, Sensor>();
 
+	protected final URL url;
+
 	protected final Document document;
 
 	protected final Element system;
@@ -64,12 +66,17 @@ abstract public class SystemConfig {
 			return t;
 	}
 
-	public SystemConfig(Document doc) {
+	public SystemConfig(URL url, Document doc) {
+		this.url = url;
 		document = doc;
 		system = document.getDocumentElement();
 		name = lookupSystemName();
 		detectorPrefix = lookupDetectorPrefix();
 		timeStamp = lookupTimestamp();
+	}
+
+	public URL getURL() {
+		return url;
 	}
 
 	public String getName() {
@@ -97,9 +104,9 @@ abstract public class SystemConfig {
 		Element root = doc.getDocumentElement();
 		String tag = root.getTagName();
 		if(tag.equals("tms_config"))
-			return new TmsConfig(doc);
+			return new TmsConfig(url, doc);
 		else if(tag.equals("arterials"))
-			return new ArterialConfig(doc);
+			return new ArterialConfig(url, doc);
 		else
 			throw new IOException("Unrecognized XML format");
 	}

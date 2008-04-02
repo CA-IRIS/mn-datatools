@@ -61,10 +61,6 @@ public class XmlParser {
 		}
 	}
 
-	public URL getURL() {
-		return url;
-	}
-
 	public Document getDocument() {
 		return document;
 	}
