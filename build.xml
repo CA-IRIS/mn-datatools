@@ -44,6 +44,9 @@
 			<param name="file.dep" value="dataextract.properties" />
 		</antcall>
 		<antcall target="check-dep">
+			<param name="file.dep" value="activation.jar" />
+		</antcall>
+		<antcall target="check-dep">
 			<param name="file.dep" value="mail.jar" />
 		</antcall>
 		<antcall target="check-dep">
@@ -153,7 +156,11 @@
 	<target name="dist" depends="jar" description="Creates the distribution directory and copies all
                          needed files.">
 		<copy todir="${build.dist.dir}/lib">
-			<fileset dir="${lib.dir}" excludes="junit*.jar"/>
+			<fileset dir="${lib.dir}">
+				<include name="activation.jar"/>
+				<include name="mail.jar"/>
+				<include name="${tms-log.jar}"/>
+			</fileset>
 		</copy>
 		<copy todir="${build.dist.dir}/lib">
 			<fileset dir="${build.lib}" />
@@ -163,6 +170,10 @@
 				<include name="**/*.html" />
 				<include name="**/*.jnlp" />
 				<include name="**/*.css" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="dataplot.properties" />
+				<include name="dataextract.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dist.dir}/images">
