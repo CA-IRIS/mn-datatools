@@ -14,14 +14,13 @@
  */
 package us.mn.state.dot.data;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -56,10 +55,9 @@ public class TmsConfig extends SystemConfig {
 	protected final HashMap<String, Element> detectorElements =
 		new HashMap<String, Element>();
 
-	public TmsConfig(String name, URL url)
-		throws ParserConfigurationException
-	{
-		super(name, url);
+	/** Create a new TMS config */
+	public TmsConfig(Document doc) {
+		super(doc);
 		loadDetectorElements();
 		loadCorridorElements();
 		loadStationElements();

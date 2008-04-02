@@ -14,57 +14,93 @@
  */
 package us.mn.state.dot.data;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
 import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * @author john3tim
- *
+ * @author Douglas Lau
  */
-public abstract class SystemConfig extends XmlParser {
+abstract public class SystemConfig {
 
 	protected final Hashtable<String, Sensor> sensors =
 		new Hashtable<String, Sensor>();
 
-	private String timeStamp;
+	protected final Document document;
+
+	protected final Element system;
 
 	protected final String name;
-	protected final Element system;
-	protected String detectorPrefix = "";
 
-	public SystemConfig(String name, URL url)
-		throws ParserConfigurationException
-	{
-		super(url);
-		this.name = name;
-		system = document.getDocumentElement();
+	protected final String detectorPrefix;
+
+	protected final String timeStamp;
+
+	protected String lookupSystemName() {
+		String n = system.getAttribute("system");
+		if(n != null)
+			return n;
+		else
+			return "";
+	}
+
+	protected String lookupDetectorPrefix() {
 		String pre = system.getAttribute("detector_prefix");
 		if(pre != null && pre.length() > 0)
-			detectorPrefix = pre;
-		timeStamp = system.getAttribute("time_stamp");
-		if(timeStamp == null)
-			timeStamp = "not available";
+			return pre;
+		else
+			return "";
 	}
 
-	public Sensor getSensor(String id) {
-		return (Sensor)sensors.get(id);
+	protected String lookupTimestamp() {
+		String t = system.getAttribute("time_stamp");
+		if(t == null)
+			return "not available";
+		else
+			return t;
 	}
 
-	public String getTimeStamp() {
-		return timeStamp;
-	}
-
-	public String getStationLabel(int stationId) {
-		return null;
+	public SystemConfig(Document doc) {
+		document = doc;
+		system = document.getDocumentElement();
+		name = lookupSystemName();
+		detectorPrefix = lookupDetectorPrefix();
+		timeStamp = lookupTimestamp();
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public Sensor getSensor(String id) {
+		return sensors.get(id);
+	}
+
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+
 	public String getDetectorPrefix() {
 		return detectorPrefix;
+	}
+
+	/** Create a system config from the specified URL */
+	static public SystemConfig create(URL url) throws IOException,
+		ParserConfigurationException
+	{
+		XmlParser parser = new XmlParser(url);
+		Document doc = parser.getDocument();
+		Element root = doc.getDocumentElement();
+		String tag = root.getTagName();
+		if(tag.equals("tms_config"))
+			return new TmsConfig(doc);
+		else if(tag.equals("arterials"))
+			return new ArterialConfig(doc);
+		else
+			throw new IOException("Unrecognized XML format");
 	}
 }

@@ -22,15 +22,12 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.UIManager;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -128,44 +125,7 @@ public class NetworkView extends JPanel{
 		listeners.remove(l);
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager
-					.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			System.err.println("Couldn't use system look and feel.");
-		}
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		JFrame frame = new JFrame("SystemView");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		NetworkView view = null;
-		try {
-			URL url = new URL("http://data.dot.state.mn.us/dds/tms.xml.gz");
-			TmsConfig rtmc = new TmsConfig("RTMC", url);
-			url = new URL("http://data.dot.state.mn.us/dds/arterials.xml.gz");
-			ArterialConfig arterials = new ArterialConfig("Arterials", url);
-			url = new URL("http://data.dot.state.mn.us/tms/tms-rochester.xml.gz");
-			TmsConfig roch = new TmsConfig("Rochester", url);
-			SystemTree[] systems = new SystemTree[3];
-			systems[0] = SystemTree.createTree(rtmc);
-			systems[1] = SystemTree.createTree(arterials);
-			systems[2] = SystemTree.createTree(roch);
-			view = new NetworkView(systems);
-			view.setOpaque(true); //content panes must be opaque
-			frame.setContentPane(view);
-		} catch (Exception e) {
-
-		}
-		frame.pack();
-		frame.setVisible(true);
-		view.find("S12");
-		view.find("S13");
-		view.find("S14");
-		view.find("S16");
-	}
-
 	public JTree getTree(){
 		return tree;
 	}
-
 }

@@ -16,123 +16,98 @@ package us.mn.state.dot.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ProxySelector;
 import java.net.URL;
 import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import us.mn.state.dot.data.extract.DataExtract;
 import us.mn.state.dot.data.plot.DataPlot;
+import us.mn.state.dot.util.HTTPProxySelector;
 
 /**
  * Main starting point for data tools. Processes command line parameters and
  * forwards them to the appropriate application
  *
  * @author <a href="mailto:timothy.a.johnson@dot.state.mn.us">Tim Johnson </a>
+ * @author Douglas Lau
  */
 public class Main {
 
-	/** Default path to traffic files when using a local data factory */
-	static protected final String DEFAULT_DATA_ROOT =
-		File.separator + "traffic";
+	/** Name of default properties file to load */
+	static protected final String DEFAULT_PROPERTIES =
+		"datatools.properties";
 
 	static protected final String DATAPLOT = "dataplot";
 
 	static protected final String DATAEXTRACT = "dataextract";
 
-	protected String dataRoot = DEFAULT_DATA_ROOT;
-
-	protected String server = null;
-
-	protected String application = null;
-
-	/** Create a new instance of Main */
-	public Main(String[] args) throws IOException,
+	/** Launch the specified application */
+	static protected void launchApp(Properties props) throws IOException,
 		ParserConfigurationException
 	{
-		setProxy();
-		parseArgs(args);
-		launchApp();
-	}
-
-	protected void setProxy() {
-		Properties p = System.getProperties();
-		p.setProperty("proxyHost", "proxy.dot.state.mn.us");
-		p.setProperty("proxyPort", "3128");
-		p.setProperty("proxySet", "true");
-	}
-
-	protected void parseArgs(String args[]) {
-		server = null;
-		for(int i = 0; i < args.length; i++) {
-			if(args[i].equals("-s") && i < (args.length - 1))
-				server = args[i + 1];
-			else if(args[i].equals("-d") && i < (args.length - 1))
-				dataRoot = args[i + 1];
+		String application = props.getProperty("datatools.application");
+		String server = props.getProperty("datatools.trafdat.url");
+		String[] config = props.getProperty(
+			"datatools.config.url").split(",");
+		SystemConfig[] cfgs = new SystemConfig[config.length];
+		for(int i = 0; i < config.length; i++) {
+			URL url = new URL(config[i]);
+			cfgs[i] = SystemConfig.create(url);
 		}
-		for(int i = 0; i < args.length; i++) {
-			if(args[i].equals("-a") && i < (args.length - 1)) {
-				application = args[i + 1].toLowerCase();
-				break;
-			}
-		}
-		if(application == null) {
-			printHelp();
-			System.exit(-1);
-		}
-		for(int i = 0; i < args.length; i++) {
-			if(args[i].equals("-h")) {
-				printHelp();
-				System.exit(-1);
-			}
-		}
-	}
-
-	private void printHelp() {
-		System.out.println("DataTools Help");
-		System.out.println("usage: java -jar datatools-<version>.jar "
-				+ "[-a application] [-d dataServer] [-s server]");
-		System.out.println();
-		System.out.println(
-				"  -s : Server name or ip. Required when using a data server.");
-		System.out.println(
-				"  -a : Application to run.  Options are dataplot and dataextract.");
-		System.out.println(
-				"  -d : Location ( path ) of local traffic data archives.");
-	}
-
-	protected void launchApp() throws IOException,
-		ParserConfigurationException
-	{
-		DataFactory factory = null;
-		SystemConfig[] cfgs = new SystemConfig[3];
-		URL url =
-			new URL("http://data.dot.state.mn.us/dds/arterials.xml.gz");
-		cfgs[0] = new ArterialConfig("Arterials", url);
-		url =
-			new URL("http://data.dot.state.mn.us/dds/tms_config.xml.gz");
-		cfgs[1] = new TmsConfig("RTMC", url);
-		url =
-			new URL("http://data.dot.state.mn.us/dds/tms-rochester.xml.gz");
-		cfgs[2] = new TmsConfig("Rochester", url);
-		String factLocation = null;
-		if(server != null) {
-			factory = new HttpDataFactory(server, cfgs);
-			factLocation = server;
-		} else {
-			factory = new LocalDataFactory(dataRoot, cfgs);
-			factLocation = dataRoot;
-		}
+		DataFactory factory = new HttpDataFactory(server, cfgs);
 		if(application.equals(DATAPLOT))
-			new DataPlot(factory, cfgs, factLocation);
+			new DataPlot(factory, cfgs, server);
 		else if(application.equals(DATAEXTRACT))
-			new DataExtract(factory, cfgs, factLocation);
+			new DataExtract(factory, cfgs, server);
+	}
+
+	/** Create a URL for the specified property file */
+	static protected URL createURL(String prop_file) throws IOException {
+		String workingDir = System.getProperty("user.dir");
+		File file = new File(workingDir, prop_file);
+		if(file.exists())
+			return file.toURI().toURL();
+		else
+			return new URL(prop_file);
+	}
+
+	/** Read the IRIS property file */
+	static protected Properties readPropertyFile(URL url)
+		throws IOException
+	{
+		Properties props = new Properties();
+		props.load(url.openStream());
+		return props;
+	}
+
+	/** Get the name of the property file to use */
+	static protected String getPropertyFile(String[] args) {
+		if(args.length > 0)
+			return args[0];
+		else
+			return DEFAULT_PROPERTIES;
 	}
 
 	/**
+	 * Main entry point.
+	 *
+	 * @param args Arguments passed to the application.
+	 */
+	static protected void execute(final String[] args) throws Exception {
+		URL url = createURL(getPropertyFile(args));
+		Properties props = readPropertyFile(url);
+		ProxySelector.setDefault(new HTTPProxySelector(props));
+		launchApp(props);
+	}
+
+	/**
+	 * Main Data Tools entry point.
+	 *
 	 * @param args the command line arguments
 	 */
 	static public void main(String args[]) {
 		try {
-			new Main(args);
+			execute(args);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

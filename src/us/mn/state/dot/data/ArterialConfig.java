@@ -14,10 +14,9 @@
  */
 package us.mn.state.dot.data;
 
-import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,10 +27,8 @@ import org.w3c.dom.NodeList;
  */
 public class ArterialConfig extends SystemConfig {
 
-	public ArterialConfig(String name, URL url)
-		throws ParserConfigurationException
-	{
-		super(name, url);
+	public ArterialConfig(Document doc) {
+		super(doc);
 	}
 
 	public Set<SystemNode> getZones(SystemTree tree) {
