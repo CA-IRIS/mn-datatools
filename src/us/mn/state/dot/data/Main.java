@@ -30,15 +30,13 @@ import us.mn.state.dot.data.plot.DataPlot;
  */
 public class Main {
 
-	private final String DATAPLOT = "dataplot";
+	/** Default path to traffic files when using a local data factory */
+	static protected final String DEFAULT_DATA_ROOT =
+		File.separator + "traffic";
 
-	private final String DATAEXTRACT = "dataextract";
+	static protected final String DATAPLOT = "dataplot";
 
-	/**
-	 * Default location where the traffic files can be found when using a
-	 * local data factory
-	 */
-	protected String DEFAULT_DATA_ROOT = File.separator + "traffic";
+	static protected final String DATAEXTRACT = "dataextract";
 
 	protected String dataRoot = DEFAULT_DATA_ROOT;
 
