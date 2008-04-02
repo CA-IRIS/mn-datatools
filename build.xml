@@ -104,6 +104,8 @@
 					value="${datatools.webstart.host}" />
 				<filter token="DATATOOLS.TRAFDAT.HOST"
 					value="${datatools.trafdat.host}" />
+				<filter token="TMSLOG.JAR"
+					value="${tms-log.jar}"/>
 			</filterset>
 		</copy>
 	</target>

@@ -17,14 +17,12 @@
        <jar href="lib/@@NAME@@-@@VERSION@@.jar"/>
        <jar href="lib/mail.jar"/>
        <jar href="lib/activation.jar"/>
+       <jar href="lib/@@TMSLOG.JAR@@"/>
      </resources>
      <security>
        <all-permissions/>
      </security>
      <application-desc main-class="us.mn.state.dot.data.Main">
-       <argument>-s</argument>
-       <argument>http://@@DATATOOLS.TRAFDAT.HOST@@:8080/trafdat</argument>
-       <argument>-a</argument>
-       <argument>DataExtract</argument>
+       <argument>http://@@DATATOOLS.WEBSTART.HOST@@/@@NAME@@/dataextract.properties</argument>
      </application-desc>
    </jnlp>
