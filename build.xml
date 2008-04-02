@@ -25,27 +25,29 @@
 	</path>
 	<property name="manifest" value="${etc.dir}/manifest.mf" />
 	<property name="build.compiler" value="modern" />
-	<!-- Check for one jar dependancy -->
-	<target name="check-jar">
-		<available property="jar.exists" file="${lib.dir}/${file.jar}" />
-		<echo message="Checking for ${lib.dir}/${file.jar}" />
-		<fail unless="jar.exists" message="Missing dependency: ${lib.dir}/${file.jar}" />
+
+	<!-- Check for one file dependancy -->
+	<target name="check-dep">
+		<available property="file.exists"
+			   file="${lib.dir}/${file.dep}" />
+		<fail unless="file.exists"
+		      message="Missing dependency: ${lib.dir}/${file.dep}" />
 	</target>
 
 	<!-- Check for dependancies -->
 	<target name="check">
-		<antcall target="check-jar">
-			<param name="file.jar" value="mail.jar" />
+		<antcall target="check-dep">
+			<param name="file.dep" value="mail.jar" />
 		</antcall>
-		<antcall target="check-jar">
-			<param name="file.jar" value="jnlp.jar" />
+		<antcall target="check-dep">
+			<param name="file.dep" value="jnlp.jar" />
 		</antcall>
 	</target>
 
 	<!-- Check for unit test dependancies -->
 	<target name="check-test" depends="check">
-		<antcall target="check-jar">
-			<param name="file.jar" value="junit-4.4.jar" />
+		<antcall target="check-dep">
+			<param name="file.dep" value="junit-4.4.jar" />
 		</antcall>
 	</target>
 
