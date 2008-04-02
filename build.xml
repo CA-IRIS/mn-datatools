@@ -11,6 +11,7 @@
 	<property name="etc.dir" value="etc" />
 	<property name="lib.dir" value="lib" />
 	<property name="docs.dir" value="docs" />
+	<property name="tms-log.jar" value="tms-log-${tms-log.version}.jar"/>
 	<property name="build.dir" value="build" />
 	<property name="build.docs.dir" value="${build.dir}/docs" />
 	<property name="build.lib" value="${build.dir}/lib" />
@@ -37,10 +38,19 @@
 	<!-- Check for dependancies -->
 	<target name="check">
 		<antcall target="check-dep">
+			<param name="file.dep" value="dataplot.properties" />
+		</antcall>
+		<antcall target="check-dep">
+			<param name="file.dep" value="dataextract.properties" />
+		</antcall>
+		<antcall target="check-dep">
 			<param name="file.dep" value="mail.jar" />
 		</antcall>
 		<antcall target="check-dep">
 			<param name="file.dep" value="jnlp.jar" />
+		</antcall>
+		<antcall target="check-dep">
+			<param name="file.dep" value="${tms-log.jar}" />
 		</antcall>
 	</target>
 
