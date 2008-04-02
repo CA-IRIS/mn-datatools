@@ -15,9 +15,10 @@
 package us.mn.state.dot.data;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
-
+import javax.xml.parsers.ParserConfigurationException;
 import us.mn.state.dot.data.extract.DataExtract;
 import us.mn.state.dot.data.plot.DataPlot;
 
@@ -46,7 +47,9 @@ public class Main {
 	protected String application = null;
 
 	/** Create a new instance of Main */
-	public Main(String[] args) throws Exception {
+	public Main(String[] args) throws IOException,
+		ParserConfigurationException
+	{
 		setProxy();
 		parseArgs(args);
 		launchApp();
@@ -98,7 +101,9 @@ public class Main {
 				"  -d : Location ( path ) of local traffic data archives.");
 	}
 
-	private void launchApp() throws Exception {
+	protected void launchApp() throws IOException,
+		ParserConfigurationException
+	{
 		DataFactory factory = null;
 		SystemConfig[] cfgs = new SystemConfig[3];
 		URL url =
