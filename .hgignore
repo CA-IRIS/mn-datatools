@@ -6,4 +6,5 @@ syntax: glob
 *.tgz
 *.gz
 *.zip
-build
+build/
+lib/
