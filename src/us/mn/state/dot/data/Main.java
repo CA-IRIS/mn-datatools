@@ -35,7 +35,7 @@ public class Main {
 
 	/** Name of default properties file to load */
 	static protected final String DEFAULT_PROPERTIES =
-		"datatools.properties";
+		"dataplot.properties";
 
 	static protected final String DATAPLOT = "dataplot";
 

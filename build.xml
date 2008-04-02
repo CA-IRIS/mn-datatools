@@ -91,6 +91,8 @@
 					value="${datatools.webstart.host}" />
 				<filter token="DATATOOLS.TRAFDAT.HOST"
 					value="${datatools.trafdat.host}" />
+				<filter token="TMSLOG.VERSION"
+					value="${tms-log.version}"/>
 			</filterset>
 		</copy>
 		<copy todir="${build.docs.dir}" filtering="true">
