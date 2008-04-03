@@ -38,12 +38,6 @@
 	<!-- Check for dependancies -->
 	<target name="check">
 		<antcall target="check-dep">
-			<param name="file.dep" value="dataplot.properties" />
-		</antcall>
-		<antcall target="check-dep">
-			<param name="file.dep" value="dataextract.properties" />
-		</antcall>
-		<antcall target="check-dep">
 			<param name="file.dep" value="activation.jar" />
 		</antcall>
 		<antcall target="check-dep">
@@ -150,11 +144,22 @@
 				Transportation. All Rights Reserved." />
 	</target>
 
+	<!-- Check for dependancies -->
+	<target name="check-dist">
+		<antcall target="check-dep">
+			<param name="file.dep" value="dataplot.properties" />
+		</antcall>
+		<antcall target="check-dep">
+			<param name="file.dep" value="dataextract.properties" />
+		</antcall>
+	</target>
+
 	<!-- ========================================================== -->
 	<!-- Creates the distribution                                            -->
 	<!-- ========================================================== -->
-	<target name="dist" depends="jar" description="Creates the distribution directory and copies all
-                         needed files.">
+	<target name="dist" depends="check-dist,jar"
+	        description="Create the distribution directory and copy all
+			     needed files.">
 		<copy todir="${build.dist.dir}/lib">
 			<fileset dir="${lib.dir}">
 				<include name="activation.jar"/>
