@@ -159,6 +159,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="activation.jar"/>
 				<include name="mail.jar"/>
+				<include name="jnlp.jar"/>
 				<include name="${tms-log.jar}"/>
 			</fileset>
 		</copy>
