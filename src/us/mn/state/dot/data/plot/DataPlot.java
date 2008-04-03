@@ -1,6 +1,6 @@
 /*
  * DataExtract
- * Copyright (C) 2002-2007  Minnesota Department of Transportation
+ * Copyright (C) 2002-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data.plot;
 
@@ -122,9 +118,6 @@ public class DataPlot extends DataTool {
 
 	/** Main window container pane */
 	protected final Container pane;
-	
-	/** The location of the file factory */
-	protected String factLocation = null;
 
 	/** Button grid for selecting graph types */
 	protected final AbstractButton[][] buttonGrid =
@@ -136,15 +129,13 @@ public class DataPlot extends DataTool {
 	/** Legend scroll pane */
 	protected JScrollPane scroll;
 
-
 	/**
 	 * Create a data plot window in a container
 	 *
 	 * @param f  The dataFactory used for all data
 	 */
-	public DataPlot( DataFactory f, SystemConfig[] cfgs, String factLocation ) {
-		super("DataPlot", cfgs, factLocation);
-		this.factLocation = factLocation;
+	public DataPlot(DataFactory f) {
+		super("DataPlot", f);
 		pane = getContentPane();
 		factory = f;
 		selection = new DateSelection( factory );
@@ -186,9 +177,6 @@ public class DataPlot extends DataTool {
 		setVisible( true );
 		frames++;
 	}
-
-
-
 
 	/** Close one data plot frame */
 	protected static void closeFrame() {
@@ -275,7 +263,7 @@ public class DataPlot extends DataTool {
 		Action newWindow =
 			new AbstractAction() {
 				public void actionPerformed( ActionEvent e ) {
-					new DataPlot( factory, configs, factLocation );
+					new DataPlot(factory);
 				}
 			};
 		newWindow.putValue( Action.NAME, "New" );
@@ -733,7 +721,7 @@ public class DataPlot extends DataTool {
 			return;
 		}
 		if ( fileFactory.FILE_OPENED ) {
-			new DataPlot( fileFactory, configs, factLocation );
+			new DataPlot(fileFactory);
 		}
 	}
 

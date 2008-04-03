@@ -53,7 +53,6 @@ import us.mn.state.dot.data.SystemConfig;
  * DataSource
  *
  * @author    <a href="mailto:timothy.a.johnson@dot.state.mn.us">Tim Johnson</a>
- * @version   $Revision: 1.42 $ $Date: 2005/08/17 20:28:18 $
  */
 public class DataExtract extends DataTool {
 
@@ -100,11 +99,9 @@ public class DataExtract extends DataTool {
 	 * Create a data extract application
 	 *
 	 * @param f             The dataFactory used for all data
-	 * @param cfgs          The <code>SystemConfig</code>'s to use
-	 * @param factLocation  The location of the <code>DataFactory</code>
 	 */
-	public DataExtract( DataFactory f, SystemConfig[] cfgs, String factLocation ) {
-		super("DataExtract", cfgs, factLocation);
+	public DataExtract(DataFactory f) {
+		super("DataExtract", f);
 		pane = this.getContentPane();
 		factory = f;
 		JMenuBar bar = new JMenuBar();
@@ -307,7 +304,7 @@ public class DataExtract extends DataTool {
 		c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
 		dateSelector = new DateSelector( factory, this );
-		detectorSelector = new DetectorSelector( configs, factory, this );
+		detectorSelector = new DetectorSelector(factory, this);
 		dataSetSelector = new DataSetSelector( factory, this );
 		c.weightx = 1;
 		c.weighty = 1;
@@ -420,7 +417,7 @@ public class DataExtract extends DataTool {
 	}
 
 	private DataRequest createDataRequest(){
-		DataRequest dr = new DataRequest( configs, factory );
+		DataRequest dr = new DataRequest(factory);
 		dr.setSensorIds(detectorSelector.getSensorIds());
 		dr.setDates(dateSelector.getDates());
 		dr.setDataSets(dataSetSelector.getDataSets());

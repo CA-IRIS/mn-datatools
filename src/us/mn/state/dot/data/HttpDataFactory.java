@@ -1,6 +1,6 @@
 /*
  * IRIS -- Intelligent Roadway Information System
- * Copyright (C) 2000-2007  Minnesota Department of Transportation
+ * Copyright (C) 2000-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data;
 
@@ -33,16 +29,21 @@ import java.util.HashMap;
  *
  * @author Douglas Lau
  */
-public final class HttpDataFactory extends DataFactory {
+public class HttpDataFactory extends DataFactory {
 
 	protected final HashMap dates = new HashMap();
 
 	protected int currentYear = 0;
-	
+
 	protected final String baseURL;
-	
+
+	/** Get the location of the data factory */
+	public String getLocation() {
+		return baseURL;
+	}
+
 	/** Create a new Http data factory */
-	public HttpDataFactory( String servletLoc, SystemConfig[] cfgs ) {
+	protected HttpDataFactory(String servletLoc, SystemConfig[] cfgs) {
 		super(cfgs);
 		baseURL = servletLoc;
 	}
@@ -79,7 +80,7 @@ public final class HttpDataFactory extends DataFactory {
 			throw new IOException("Invalid URL: " + loc);
 		}
 	}
-	
+
 	/** Create a path for the specified calendar (date) */
 	protected String createPath(Calendar c) {
 		return c.get(Calendar.YEAR) + "/" + createKey(c);
@@ -114,11 +115,10 @@ public final class HttpDataFactory extends DataFactory {
 		protected Data( String id ) {
 			this.id = id;
 			Sensor s = null;
-			if(configs != null){
-				for(int i=0; i<configs.length; i++){
-					s = configs[i].getSensor(id);
-					if(s != null) break;
-				}
+			for(SystemConfig cfg: configs) {
+				s = cfg.getSensor(id);
+				if(s != null)
+					break;
 			}
 			if(s != null){
 				fieldLength = s.getField();

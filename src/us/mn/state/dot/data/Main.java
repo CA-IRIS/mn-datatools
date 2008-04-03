@@ -45,20 +45,12 @@ public class Main {
 	static protected void launchApp(Properties props) throws IOException,
 		ParserConfigurationException
 	{
+		DataFactory factory = DataFactory.create(props);
 		String application = props.getProperty("datatools.application");
-		String server = props.getProperty("datatools.trafdat.url");
-		String[] config = props.getProperty(
-			"datatools.config.url").split(",");
-		SystemConfig[] cfgs = new SystemConfig[config.length];
-		for(int i = 0; i < config.length; i++) {
-			URL url = new URL(config[i]);
-			cfgs[i] = SystemConfig.create(url);
-		}
-		DataFactory factory = new HttpDataFactory(server, cfgs);
 		if(application.equals(DATAPLOT))
-			new DataPlot(factory, cfgs, server);
+			new DataPlot(factory);
 		else if(application.equals(DATAEXTRACT))
-			new DataExtract(factory, cfgs, server);
+			new DataExtract(factory);
 	}
 
 	/** Create a URL for the specified property file */

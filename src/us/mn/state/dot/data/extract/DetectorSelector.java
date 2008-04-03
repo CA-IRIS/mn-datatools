@@ -1,6 +1,6 @@
 /*
  * DataExtract
- * Copyright (C) 2002-2007  Minnesota Department of Transportation
+ * Copyright (C) 2002-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data.extract;
 import java.awt.Dimension;
@@ -57,7 +53,6 @@ import us.mn.state.dot.data.SystemTree;
  * DateSelector
  *
  * @author    <a href="mailto:timothy.a.johnson@dot.state.mn.us">Tim Johnson</a>
- * @version   $Revision: 1.40 $ $Date: 2005/08/09 18:52:42 $
  */
 public class DetectorSelector extends Selector
 		implements SystemNodeSelectionListener{
@@ -67,9 +62,6 @@ public class DetectorSelector extends Selector
 
 	protected NetworkView network;
 
-	/** File with information about the TMS system */
-	private SystemConfig[] configs = null;
-
 	private final List<SystemNode> selectedNodes;
 
 	/**
@@ -78,16 +70,13 @@ public class DetectorSelector extends Selector
 	 * @param f  The <code>DataFactory</code>
 	 * @param e  The <code>DataExtract</code> application
 	 */
-	public DetectorSelector( SystemConfig[] cfgs, DataFactory f,
-			DataExtract e )
-	{
+	public DetectorSelector(DataFactory f, DataExtract e) {
 		super( f, e );
-		this.configs = cfgs;
 		selectedNodes = new ArrayList<SystemNode>();
+		SystemConfig[] configs = f.getConfigs();
 		SystemTree[] systems = new SystemTree[configs.length];
-		for(int i=0; i<configs.length; i++){
+		for(int i = 0; i < configs.length; i++)
 			systems[i] = SystemTree.createTree(configs[i]);
-		}
 		network = new NetworkView(systems);
 		network.addSystemNodeSelectionListener(this);
 		selectedList = new JList();

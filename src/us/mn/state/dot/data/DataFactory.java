@@ -1,6 +1,6 @@
 /*
  * IRIS -- Intelligent Roadway Information System
- * Copyright (C) 2000-2007  Minnesota Department of Transportation
+ * Copyright (C) 2000-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data;
 
@@ -22,7 +18,10 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Calendar;
+import java.util.Properties;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * DataFactory is an abstract class for retrieving volume and occupancy
@@ -32,9 +31,34 @@ import java.util.Calendar;
  */
 abstract public class DataFactory implements Constants, DateChecker {
 
+	/** Create a data factory from a set of properties */
+	static public DataFactory create(Properties props) throws IOException,
+		ParserConfigurationException
+	{
+		String server = props.getProperty("datatools.trafdat.url");
+		String[] config = props.getProperty(
+			"datatools.config.url").split(",");
+		SystemConfig[] cfgs = new SystemConfig[config.length];
+		for(int i = 0; i < config.length; i++) {
+			URL url = new URL(config[i]);
+			cfgs[i] = SystemConfig.create(url);
+		}
+		return new HttpDataFactory(server, cfgs);
+	}
+
+	/** System configurations */
 	protected final SystemConfig[] configs;
 
-	protected DataFactory(SystemConfig[] cfgs){
+	/** Get the system configs */
+	public SystemConfig[] getConfigs() {
+		return configs;
+	}
+
+	/** Get the location of the data factory */
+	abstract public String getLocation();
+
+	/** Create a new data factory */
+	protected DataFactory(SystemConfig[] cfgs) {
 		configs = cfgs;
 	}
 

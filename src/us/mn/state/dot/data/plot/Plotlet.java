@@ -48,7 +48,6 @@ import us.mn.state.dot.data.CSVDataFactory;
 import us.mn.state.dot.data.DataFactory;
 import us.mn.state.dot.data.DateSelection;
 import us.mn.state.dot.data.HttpDataFactory;
-import us.mn.state.dot.data.LocalDataFactory;
 import us.mn.state.dot.data.PlotDetector;
 import us.mn.state.dot.data.SingleDetector;
 
@@ -143,34 +142,6 @@ public class Plotlet extends JPanel {
 			plot.detectorAdded(det);
 		} catch(InstantiationException ie) {
 			// Ignore this?
-		}
-	}
-
-	/**
-	 * Main method to run DataPlot as an application
-	 *
-	 * @param args  The name of the server
-	 */
-	public static void main( String[] args ) {
-		try {
-			Thread t = Thread.currentThread();
-			t.setPriority( t.getPriority() + 1 );
-			DataFactory factory = null;
-			if ( args.length > 0 ) {
-				//FIXME create a set of system configs to pass
-				factory = new HttpDataFactory( args[0], null );
-			} else {
-				//FIXME create a set of system configs to pass
-				factory = new LocalDataFactory( "traffic", null );
-			}
-			Plotlet p = new Plotlet(factory);
-			p.addDetector("4708");
-			JFrame frame = new JFrame();
-			frame.setContentPane(p);
-			frame.setVisible( true );
-		} catch ( Exception e ) {
-			e.printStackTrace();
-			System.exit( -1 );
 		}
 	}
 

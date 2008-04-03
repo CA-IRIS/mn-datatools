@@ -1,6 +1,6 @@
 /*
  * IRIS -- Intelligent Roadway Information System
- * Copyright (C) 2000-2007  Minnesota Department of Transportation
+ * Copyright (C) 2000-2008  Minnesota Department of Transportation
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package us.mn.state.dot.data;
 
@@ -38,8 +34,7 @@ import us.mn.state.dot.data.plot.PlotSet;
  *
  * @author    Timothy A. Johnson
  */
-
-public final class CSVDataFactory extends DataFactory {
+public class CSVDataFactory extends DataFactory {
 
 	/** An internal representation of a data type */
 	private static int VOLUME = 1;
@@ -81,7 +76,12 @@ public final class CSVDataFactory extends DataFactory {
 	private Calendar[] calendars;
 
 	/** A suggested path to the file */
-	private String location = null;
+	private final String location;
+
+	/** Get the location of the data factory */
+	public String getLocation() {
+		return location;
+	}
 
 	/** A suggested set of file types to display in open dialog */
 	private String[] fileTypes = null;
@@ -156,6 +156,7 @@ public final class CSVDataFactory extends DataFactory {
 	 */
 	public CSVDataFactory( BufferedReader br, SystemConfig[] cfgs ) {
 		super(cfgs);
+		location = "Unknown";
 		inFile = br;
 		processFile();
 		FILE_OPENED = true;
