@@ -156,15 +156,11 @@ public abstract class FileFormat implements Constants, Serializable {
 	 */
 	protected void writeColumnHeader( PrintWriter writer ) {
 		Axis.Time time = new Axis.Time();
-		Collection c = request.getTimeRanges();
-		TimeRange range = null;
-		Iterator ranges = c.iterator();
 		writer.print( " , , ," );
 		int currentTime = NULL;
 		int endTime = NULL;
 		int smoothing = NULL;
-		while ( ranges.hasNext() ) {
-			range = ( TimeRange ) ( ranges.next() );
+		for(TimeRange range : request.getTimeRanges()) {
 			if ( dataElements.contains( OutputSelector.VALUES ) ||
 					dataElements.contains( OutputSelector.DAY_MEDIAN ) ) {
 				currentTime = range.getStart();
@@ -256,22 +252,12 @@ public abstract class FileFormat implements Constants, Serializable {
 	 */
 	protected void writeDayAggregationData( PrintWriter writer,
 			String id, String dataSet ) {
-		Collection dates = request.getDates();
-		Collection times = request.getTimeRanges();
-		Calendar c = null;
-		TimeRange range = null;
-		Iterator itCal = null;
-		Iterator itRange = null;
 		if ( getDataElements().contains( OutputSelector.DAY_MEDIAN ) ) {
-			itRange = times.iterator();
-			while ( itRange.hasNext() ) {
-				range = ( TimeRange ) ( itRange.next() );
+			for(TimeRange range : request.getTimeRanges()) {
 				float[][] smoothedValues =
-						new float[dates.size()][range.getSampleSize()];
-				itCal = dates.iterator();
+						new float[request.getDates().size()][range.getSampleSize()];
 				int dateIndex = 0;
-				while ( itCal.hasNext() ) {
-					c = ( Calendar ) ( itCal.next() );
+				for(Calendar c : request.getDates()) {
 					DataSet set = request.getDataSet(c, id, dataSet);
 					float[] values = set.getSmoothedArray(
 							( range.getStart() ), range.getExtent(),
@@ -283,8 +269,8 @@ public abstract class FileFormat implements Constants, Serializable {
 				}
 				for ( int sampleNumber = 0;
 						sampleNumber < range.getSampleSize(); sampleNumber++ ) {
-					float[] dailySamples = new float[dates.size()];
-					for ( dateIndex = 0; dateIndex < dates.size(); dateIndex++ ) {
+					float[] dailySamples = new float[request.getDates().size()];
+					for ( dateIndex = 0; dateIndex < request.getDates().size(); dateIndex++ ) {
 						dailySamples[dateIndex] =
 								smoothedValues[dateIndex][sampleNumber];
 					}
