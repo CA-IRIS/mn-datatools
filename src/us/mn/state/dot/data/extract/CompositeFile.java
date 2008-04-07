@@ -19,7 +19,6 @@
 package us.mn.state.dot.data.extract;
 
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -69,45 +68,25 @@ public class CompositeFile extends FileFormat {
 	 */
 	public void writeRows( Object fieldValue,
 			PrintWriter writer ) {
-		Collection sensors = request.getSensorIds();
-		Collection dates = request.getDates();
-		Collection times = request.getTimeRanges();
-		Collection dataSets = request.getDataSets();
 //		ProgressMonitor monitor = processor.getProgressMonitor();
 //		monitor.setMaximum(
 //				sensors.size() * dates.size() * times.size() * dataSets.size() );
-		String id = null;
-		String dataSet = null;
-		Calendar c = null;
-		TimeRange range = null;
-		Iterator itId = null;
-		Iterator itCal = null;
-		Iterator itSet = null;
-		Iterator itRange = null;
 //		int progress = -1;
-		itId = sensors.iterator();
-		while ( itId.hasNext() ) {
-			id = ((String)(itId.next())).toUpperCase();
+		for(String id : request.getSensorIds()) {
+			id = id.toUpperCase();
 //			monitor.setNote( "Processing " + id + "..." );
-			itSet = dataSets.iterator();
-			while ( itSet.hasNext() ) {
-				dataSet = (String)itSet.next();
-				itCal = dates.iterator();
-				while ( itCal.hasNext() ) {
-					c = ( Calendar ) ( itCal.next() );
+			for(String dataSet : request.getDataSets()) {
+				for(Calendar c : request.getDates()) {
 					String d = formatter.format( c.getTime() );
-					itRange = times.iterator();
 					if ( dataElements.contains( OutputSelector.VALUES ) ||
 							dataElements.contains( OutputSelector.SUM ) ||
 							dataElements.contains( OutputSelector.AVERAGE ) ||
 							dataElements.contains( OutputSelector.TIME_MEDIAN ) ||
 							dataElements.contains( OutputSelector.SAMPLE ) ) {
 						writer.print( id + "," + dataSet + "," + d + "," );
-						while ( itRange.hasNext() ) {
-							range = ( TimeRange ) ( itRange.next() );
+						for(TimeRange range : request.getTimeRanges()) {
 //							monitor.setProgress( ++progress );
-							writeRowData(
-									writer, c, id, dataSet, range );
+							writeRowData( writer, c, id, dataSet, range );
 						}
 						writer.println();
 					}
