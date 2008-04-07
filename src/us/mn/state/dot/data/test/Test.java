@@ -37,7 +37,7 @@ public class Test {
 
 	public Test(){
 		try{
-			URL url = new URL("http://data.dot.state.mn.us:8080/dds/tms.xml.gz");
+/*			URL url = new URL("http://data.dot.state.mn.us:8080/dds/tms.xml.gz");
 			SystemConfig[] configs = new SystemConfig[1];
 			configs[0] = new TmsConfig("RTMC", url);
 			HttpDataFactory fact = new HttpDataFactory(
@@ -52,7 +52,7 @@ public class Test {
 			PlotDetector d3 = PlotDetector.createStationDetector( fact, "S341", sensors);
 			printData( d1 );
 			printData( d2 );
-			printData( d3 );
+			printData( d3 );*/
 		}catch( Exception e ){
 			e.printStackTrace();
 		}

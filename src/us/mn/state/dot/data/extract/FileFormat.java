@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -64,6 +65,7 @@ public abstract class FileFormat implements Constants, Serializable {
 	/** Description of the Field */
 	protected final String name;
 
+	protected final SimpleDateFormat formatter = new SimpleDateFormat( "yyyy/MM/dd" );
 
 	/**
 	 * Constructor for the FileFormat object

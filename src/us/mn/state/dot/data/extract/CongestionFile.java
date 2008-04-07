@@ -167,8 +167,6 @@ public class CongestionFile extends FileFormat {
 			itCal = dates.iterator();
 			while ( itCal.hasNext() ) {
 				c = ( Calendar ) ( itCal.next() );
-				SimpleDateFormat formatter =
-						new SimpleDateFormat( "yyyy/MM/dd" );
 				String d = formatter.format( c.getTime() );
 				if ( dataElements.contains( OutputSelector.VALUES ) ) {
 					writer.print( " ," + dataSet + "," + d + "," );

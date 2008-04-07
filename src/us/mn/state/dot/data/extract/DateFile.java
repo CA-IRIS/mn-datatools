@@ -68,8 +68,6 @@ public class DateFile extends FileFormat {
 	protected void writeRows( Object fieldValue,
 			PrintWriter writer ) {
 		Calendar c = ( Calendar ) fieldValue;
-		SimpleDateFormat formatter =
-				new SimpleDateFormat( "yyyy/MM/dd" );
 		String d = formatter.format( c.getTime() );
 		Collection sensors = request.getSensorIds();
 		Collection times = request.getTimeRanges();
