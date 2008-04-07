@@ -134,7 +134,7 @@ public class DataRequest implements Constants, Serializable {
 	 *
 	 * @return   The data set collection.
 	 */
-	public Collection getDataSets() {
+	public Collection<String> getDataSets() {
 		return dataSets;
 	}
 
@@ -144,7 +144,7 @@ public class DataRequest implements Constants, Serializable {
 	 *
 	 * @return   The collection of detector ids.
 	 */
-	public Collection getSensorIds() {
+	public Collection<String> getSensorIds() {
 		return sensorIds;
 	}
 
@@ -154,7 +154,7 @@ public class DataRequest implements Constants, Serializable {
 	 *
 	 * @return   The collection of dates.
 	 */
-	public Collection getDates() {
+	public Collection<Calendar> getDates() {
 		return dates;
 	}
 
@@ -164,7 +164,7 @@ public class DataRequest implements Constants, Serializable {
 	 *
 	 * @return   The collection of TimeRanges.
 	 */
-	public Collection getTimeRanges() {
+	public Collection<TimeRange> getTimeRanges() {
 		return ranges;
 	}
 
