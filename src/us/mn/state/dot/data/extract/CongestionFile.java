@@ -21,7 +21,6 @@ package us.mn.state.dot.data.extract;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 import us.mn.state.dot.data.Axis;
@@ -55,8 +54,7 @@ public class CongestionFile extends FileFormat {
 	public void writeFile( String fn, Calendar c, PrintWriter writer ) {
 		writer.println();
 		writeColumnHeader( writer );
-		Collection ids = request.getSensorIds();
-		writeRows(ids, writer );
+		writeRows(request.getSensorIds(), writer );
 	}
 
 
@@ -66,20 +64,13 @@ public class CongestionFile extends FileFormat {
 	 * @param writer     The PrintWriter used to write the data.
 	 */
 	protected void writeColumnHeader( PrintWriter writer ) {
-		String id = null;
 		Axis.Time time = new Axis.Time();
-		TimeRange range = null;
-		Collection ranges = request.getTimeRanges();
-		Iterator rangeIt = ranges.iterator();
-		Collection ids = request.getSensorIds();
-		Iterator idIt = ids.iterator();
 		writer.print( " , , ," );
 		int currentTime = NULL;
 		int endTime = NULL;
 		int smoothing = NULL;
 		int columnCount = 0;
-		while ( rangeIt.hasNext() ) {
-			range = ( TimeRange ) ( rangeIt.next() );
+		for(TimeRange range : request.getTimeRanges()) {
 			int e = range.getExtent();
 			int s = range.getSmoothing();
 			columnCount += e / s;
@@ -96,20 +87,15 @@ public class CongestionFile extends FileFormat {
 				columnCount += 1;
 			}
 		}
-		while ( idIt.hasNext() ) {
-			id = ( String ) ( idIt.next() );
+		for(String id : request.getSensorIds()) {
 			for ( int i = 0; i < columnCount; i++ ) {
 				writer.print( id + "," );
 			}
 		}
 		writer.println();
 		writer.print( " , , ," );
-		idIt = ids.iterator();
-		while ( idIt.hasNext() ) {
-			id = ( String ) ( idIt.next() );
-			rangeIt = ranges.iterator();
-			while ( rangeIt.hasNext() ) {
-				range = ( TimeRange ) ( rangeIt.next() );
+		for(String id : request.getSensorIds()) {
+			for(TimeRange range : request.getTimeRanges()) {
 				currentTime = range.getStart();
 				endTime = currentTime + range.getExtent();
 				smoothing = range.getSmoothing();
@@ -150,7 +136,6 @@ public class CongestionFile extends FileFormat {
 //		ProgressMonitor monitor = processor.getProgressMonitor();
 //		monitor.setMaximum( ids.size() * dates.size() *
 //				times.size() * dataSets.size() );
-		Iterator itRange = null;
 //		int progress = -1;
 		for(String dataSet : dataSets) {
 //			monitor.setNote( "Processing " + dataSet + "..." );
