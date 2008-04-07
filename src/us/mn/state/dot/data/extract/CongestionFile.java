@@ -19,7 +19,6 @@
 package us.mn.state.dot.data.extract;
 
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -144,38 +143,24 @@ public class CongestionFile extends FileFormat {
 	 */
 	protected void writeRows( Object values,
 			PrintWriter writer ) {
-		Collection ids = ( Collection ) values;
-		Collection dates = request.getDates();
-		Collection times = request.getTimeRanges();
-		Collection dataSets = request.getDataSets();
+		Collection<String> ids = ( Collection ) values;
+		Collection<Calendar> dates = request.getDates();
+		Collection<TimeRange> times = request.getTimeRanges();
+		Collection<String> dataSets = request.getDataSets();
 //		ProgressMonitor monitor = processor.getProgressMonitor();
 //		monitor.setMaximum( ids.size() * dates.size() *
 //				times.size() * dataSets.size() );
-		String dataSet = null;
-		Calendar c = null;
-		TimeRange range = null;
-		Iterator idsIt = null;
-		Iterator itCal = null;
-		Iterator itSet = null;
 		Iterator itRange = null;
-		String id = null;
 //		int progress = -1;
-		itSet = dataSets.iterator();
-		while ( itSet.hasNext() ) {
-			dataSet = ( String )itSet.next();
+		for(String dataSet : dataSets) {
 //			monitor.setNote( "Processing " + dataSet + "..." );
-			itCal = dates.iterator();
-			while ( itCal.hasNext() ) {
-				c = ( Calendar ) ( itCal.next() );
+			for(Calendar c : dates) {
 				String d = formatter.format( c.getTime() );
 				if ( dataElements.contains( OutputSelector.VALUES ) ) {
 					writer.print( " ," + dataSet + "," + d + "," );
-					idsIt = ids.iterator();
-					while ( idsIt.hasNext() ) {
-						id = ( ( String ) idsIt.next() ).toUpperCase();
-						itRange = times.iterator();
-						while ( itRange.hasNext() ) {
-							range = ( TimeRange ) ( itRange.next() );
+					for(String id : ids) {
+						id = id.toUpperCase();
+						for(TimeRange range : times) {
 //							monitor.setProgress( ++progress );
 							writeRowData(
 									writer, c, id, dataSet, range );
@@ -187,10 +172,8 @@ public class CongestionFile extends FileFormat {
 			if ( dataElements.contains( OutputSelector.DAY_MEDIAN ) ) {
 				writer.print( " ," + dataSet + "," +
 						OutputSelector.DAY_MEDIAN + "," );
-				idsIt = ids.iterator();
-				while ( idsIt.hasNext() ) {
-					id = ( ( String ) idsIt.next() ).toUpperCase();
-					itRange = times.iterator();
+				for(String id : ids) {
+					id = id.toUpperCase();
 					writeDayAggregationData(
 							writer, id, dataSet );
 				}
