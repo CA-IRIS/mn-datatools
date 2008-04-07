@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -333,11 +332,8 @@ public class DataRequest implements Constants, Serializable {
 	 */
 	private String[] createDataFileNames() {
 		String[] names = new String[dataSets.size()];
-		Iterator it = dataSets.iterator();
 		int i = 0;
-		String set = null;
-		while ( it.hasNext() ) {
-			set = (String)it.next();
+		for(String set : dataSets) {
 			if ( set != null ) {
 				names[i++] = set;
 			}
@@ -353,13 +349,10 @@ public class DataRequest implements Constants, Serializable {
 	 */
 	private String[] createDateFileNames() {
 		String[] names = new String[dates.size()];
-		Iterator it = dates.iterator();
-		Calendar c = null;
 		SimpleDateFormat formatter = new SimpleDateFormat( "yyyyMMdd" );
 		String dateString = null;
 		int i = 0;
-		while ( it.hasNext() ) {
-			c = ( Calendar ) ( it.next() );
+		for(Calendar c : dates) {
 			dateString = formatter.format( c.getTime() );
 			names[i++] = dateString;
 		}
@@ -375,10 +368,9 @@ public class DataRequest implements Constants, Serializable {
 	private String[] createDetFileNames() {
 		String[] names =
 				new String[sensorIds.size()];
-		Iterator it = sensorIds.iterator();
 		int i = 0;
-		while(it.hasNext()){
-			String id = ((String)it.next()).toUpperCase();
+		for(String id : sensorIds){
+			id = id.toUpperCase();
 			if(!id.startsWith("S")){
 				names[i++] = "Detector_" + id;
 			}else{
