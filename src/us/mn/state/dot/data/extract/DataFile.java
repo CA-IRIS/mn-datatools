@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 
@@ -73,33 +72,17 @@ public class DataFile extends FileFormat {
 	protected void writeRows( Object object,
 			PrintWriter writer ) {
 		String dataSet = ( String ) object;
-		Collection sensors = request.getSensorIds();
-		Collection dates = request.getDates();
-		Collection times = request.getTimeRanges();
-		String id = null;
-		Calendar c = null;
-		TimeRange range = null;
-		Iterator itId = null;
-		Iterator itCal = null;
-		Iterator itRange = null;
-		itId = sensors.iterator();
-		while ( itId.hasNext() ) {
-			id = ( String ) ( itId.next() );
-			itCal = dates.iterator();
-			while ( itCal.hasNext() ) {
-				c = ( Calendar ) ( itCal.next() );
+		for(String id : request.getSensorIds()) {
+			for(Calendar c : request.getDates()) {
 				String d = formatter.format( c.getTime() );
-				itRange = times.iterator();
 				if ( dataElements.contains( OutputSelector.VALUES ) ||
 						dataElements.contains( OutputSelector.SUM ) ||
 						dataElements.contains( OutputSelector.AVERAGE ) ||
 						dataElements.contains( OutputSelector.TIME_MEDIAN ) ||
 						dataElements.contains( OutputSelector.SAMPLE ) ) {
 					writer.print( id + "," + dataSet + "," + d + "," );
-					while ( itRange.hasNext() ) {
-						range = ( TimeRange ) ( itRange.next() );
-						writeRowData(
-								writer, c, id, dataSet, range );
+					for(TimeRange range : request.getTimeRanges()) {
+						writeRowData( writer, c, id, dataSet, range );
 					}
 					writer.println();
 				}
