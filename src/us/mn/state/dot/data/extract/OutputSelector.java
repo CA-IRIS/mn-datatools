@@ -100,7 +100,8 @@ public class OutputSelector extends Selector {
 			new DateFile(),
 			new DataFile(),
 			new CongestionFile(),
-			new LaneClosureFile()
+			new LaneClosureFile(),
+			new DBFile()
 	};
 	
 	private JComboBox formats = new JComboBox(formatOptions);
@@ -381,7 +382,9 @@ public class OutputSelector extends Selector {
 				options[i].setSelected(false);
 			}
 		}
-		if(f instanceof CompositeFile || f instanceof CongestionFile){
+		if(f instanceof CompositeFile ||
+				f instanceof CongestionFile ||
+				f instanceof DBFile){
 			name.setEnabled(true);
 			name.setBackground( Color.WHITE );
 		}else{

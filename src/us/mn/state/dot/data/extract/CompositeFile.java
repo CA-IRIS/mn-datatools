@@ -21,7 +21,6 @@ package us.mn.state.dot.data.extract;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**

@@ -195,6 +195,7 @@ public class DataRequest implements Constants, Serializable {
 	public String[] getFileNames() {
 		if ( format instanceof CompositeFile ) return fileNames;
 		if ( format instanceof CongestionFile ) return fileNames;
+		if ( format instanceof DBFile ) return fileNames;
 		if ( format instanceof LaneClosureFile ) return createDetFileNames();
 		if ( format instanceof DetectorFile ) return createDetFileNames();
 		if ( format instanceof DateFile ) return createDateFileNames();

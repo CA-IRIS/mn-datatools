@@ -39,7 +39,7 @@ import us.mn.state.dot.data.StationDetector;
  * @version   $Revision: 1.23 $ $Date: 2005/08/15 16:33:04 $
  */
 public abstract class DataSet
-		 implements Constants {
+		 implements Constants, Comparable {
 
 	/** Plot data */
 	protected final PlotData plotData;
@@ -54,7 +54,12 @@ public abstract class DataSet
 	protected final BoundedRangeModel model =
 			new DefaultBoundedRangeModel();
 
-
+	public int compareTo(Object o){
+		DataSet set0 = this;
+		DataSet set1 = (DataSet)o;
+		return set0.getName().compareTo(set1.getName());
+	}
+	
 	/**
 	 * Create a new data set
 	 *
