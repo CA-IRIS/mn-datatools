@@ -83,10 +83,8 @@ public class DBFile extends FileFormat {
 	}
 
 	private void writeDailyData(String id, Calendar c){
-		for(String dataSet : request.getDataSets()) {
-			for(TimeRange range : request.getTimeRanges()) {
-				writeRowData( writer, c, id, dataSet, range );
-			}
+		for(TimeRange range : request.getTimeRanges()) {
+			writeRowData( writer, c, id, null, range );
 		}
 	}
 
