@@ -210,10 +210,10 @@ public final class PlotSet implements DateSelection.Listener {
 	public String getColumnName() { return columnName; }
 		
 	/** List of dates in the set */
-	protected final ArrayList dates = new ArrayList();
+	protected final ArrayList<Date> dates = new ArrayList<Date>();
 
 	/** List of detectors in the set */
-	protected final ArrayList detectors = new ArrayList();
+	protected final ArrayList<PlotDetector> detectors = new ArrayList<PlotDetector>();
 
 	/** Get the detector for a specified row */
 	public PlotDetector getDetector( int row ) {
@@ -221,7 +221,7 @@ public final class PlotSet implements DateSelection.Listener {
 	}
 
 	/** List of plots in the set */
-	protected final ArrayList plots = new ArrayList();
+	protected final ArrayList<PlotData> plots = new ArrayList<PlotData>();
 
 	/** List containing the rows in the set */
 	protected ArrayList rows = detectors;

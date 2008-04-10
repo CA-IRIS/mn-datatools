@@ -32,7 +32,8 @@ abstract public class SystemTree extends DefaultMutableTreeNode {
 	protected SystemConfig system = null;
 	
 	/** List of registered listeners to this stream. */
-	private ArrayList listeners = new ArrayList<SystemNodeSelectionListener>();
+	private ArrayList<SystemNodeSelectionListener> listeners =
+		new ArrayList<SystemNodeSelectionListener>();
 
 	protected final Hashtable<String, SystemNode> nodes =
 		new Hashtable<String, SystemNode>();
