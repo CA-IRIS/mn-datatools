@@ -31,7 +31,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -47,7 +46,6 @@ import javax.swing.filechooser.FileSystemView;
 
 import us.mn.state.dot.data.DataFactory;
 import us.mn.state.dot.data.DataTool;
-import us.mn.state.dot.data.SystemConfig;
 
 /**
  * DataSource
@@ -340,22 +338,17 @@ public class DataExtract extends DataTool {
 	 */
 	protected void updateSelectors( DataRequest r ) {
 		clearSelectors();
-		Iterator it = r.getSensorIds().iterator();
-		while(it.hasNext()){
-			String id = (String)it.next();
+		for(String id : r.getSensorIds()){
 			detectorSelector.select(id);
 		}
-		it = r.getDates().iterator();
-		while ( it.hasNext() ) {
-			dateSelector.select( ( Calendar ) ( it.next() ) );
+		for(Calendar c : r.getDates()) {
+			dateSelector.select(c);
 		}
-		it = r.getDataSets().iterator();
-		while ( it.hasNext() ) {
-			dataSetSelector.select( (String)it.next() );
+		for(String dataSet : r.getDataSets()) {
+			dataSetSelector.select(dataSet);
 		}
-		it = r.getTimeRanges().iterator();
-		while ( it.hasNext() ) {
-			timeSelector.select( ( TimeRange ) ( it.next() ) );
+		for(TimeRange range : r.getTimeRanges()) {
+			timeSelector.select(range);
 		}
 		outputSelector.setOutputDir(r.getOutputDir());
 		FileFormat f = r.getFileFormat();
@@ -368,9 +361,8 @@ public class DataExtract extends DataTool {
 					outputSelector.setFileName( ( r.getFileNames() )[0] );
 				}
 			}
-			it = f.getDataElements().iterator();
-			while ( it.hasNext() ) {
-				outputSelector.selectOutputOption( ( String ) ( it.next() ) );
+			for(String dataElement : f.getDataElements()) {
+				outputSelector.selectOutputOption(dataElement);
 			}
 		}
 	}

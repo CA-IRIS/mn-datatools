@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -60,7 +59,7 @@ public abstract class FileFormat implements Constants, Serializable {
 	protected Collection columns = null;
 
 	/** Description of the Field */
-	protected Collection dataElements = null;
+	protected Collection<String> dataElements = null;
 
 	/** Description of the Field */
 	protected final String name;
@@ -105,7 +104,7 @@ public abstract class FileFormat implements Constants, Serializable {
 	 *
 	 * @param elements  The new dataElements value
 	 */
-	public void setDataElements( Collection elements ) {
+	public void setDataElements( Collection<String> elements ) {
 		dataElements = elements;
 	}
 
@@ -135,7 +134,7 @@ public abstract class FileFormat implements Constants, Serializable {
 	 *
 	 * @return   The dataElements value
 	 */
-	public Collection getDataElements() {
+	public Collection<String> getDataElements() {
 		return dataElements;
 	}
 
