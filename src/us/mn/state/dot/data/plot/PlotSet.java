@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
-import java.util.Iterator;
 
 import us.mn.state.dot.data.DateSelection;
 import us.mn.state.dot.data.PlotData;
@@ -318,12 +317,8 @@ public final class PlotSet implements DateSelection.Listener {
 	/** Do a plot changed thingy */
 	protected void doPlotChanged() {
 		plots.clear();
-		Iterator itDate = dates.iterator();
-		while( itDate.hasNext() ) {
-			Date date = (Date)itDate.next();
-			Iterator itDet = detectors.iterator();
-			while( itDet.hasNext() ) {
-				PlotDetector det = (PlotDetector)itDet.next();
+		for(Date date : dates) {
+			for(PlotDetector det : detectors) {
 				plots.add( new PlotData( date, det ) );
 			}
 		}
@@ -352,9 +347,7 @@ public final class PlotSet implements DateSelection.Listener {
 
 	/** Refresh the data by clearing the caches */
 	public void refresh() {
-		Iterator it = detectors.iterator();
-		while( it.hasNext() ) {
-			PlotDetector plot = (PlotDetector)it.next();
+		for(PlotDetector plot : detectors) {
 			plot.refresh();
 		}
 		processSelectionChangedEvent();
