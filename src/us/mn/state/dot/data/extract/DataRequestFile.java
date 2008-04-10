@@ -19,7 +19,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.w3c.dom.Document;
@@ -60,11 +59,9 @@ public class DataRequestFile extends File{
 		}
 	}
 	
-	private void writeDates( PrintWriter writer, Collection dates ){
-		Iterator it = dates.iterator();
-		while ( it.hasNext() ){
+	private void writeDates( PrintWriter writer, Collection<Calendar> dates ){
+		for(Calendar c : dates){
 			try{
-				Calendar c = (Calendar)( it.next() );
 				writer.println( "\t<calendar " +
 					"date=\"" + c.get( Calendar.DATE ) + "\" " +
 					"month=\"" + ( c.get( Calendar.MONTH ) + 1 ) + "\" " +
@@ -73,11 +70,9 @@ public class DataRequestFile extends File{
 		}	
 	}
 
-	private void writeTimeRanges( PrintWriter writer, Collection ranges ){
-		Iterator it = ranges.iterator();
-		while ( it.hasNext() ){
+	private void writeTimeRanges( PrintWriter writer, Collection<TimeRange> ranges ){
+		for(TimeRange r : ranges){
 			try{
-				TimeRange r = (TimeRange)( it.next() );
 				writer.println( "\t<timerange " +
 					"begin=\"" + r.getStart() + "\" " +
 					"end=\"" + r.getEnd() + "\" " +
@@ -86,23 +81,20 @@ public class DataRequestFile extends File{
 		}	
 	}
 
-	private void writeSensors( PrintWriter writer, Collection detectors ){
-		Iterator it = detectors.iterator();
-		while ( it.hasNext() ){
+	private void writeSensors( PrintWriter writer, Collection<String> detectors ){
+		for(String id : detectors){
 			try{
-				writer.println( "\t<sensor id=\"" + (String)( it.next() ) + "\"/>" );
+				writer.println( "\t<sensor id=\"" + id + "\"/>" );
 			}catch( Exception e ){
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private void writeDataSets( PrintWriter writer, Collection sets ){
-		Iterator it = sets.iterator();
-		while ( it.hasNext() ){
+	private void writeDataSets( PrintWriter writer, Collection<String> sets ){
+		for(String dataSet : sets){
 			try{
-				String set = (String)it.next();
-				writer.println( "\t<dataset id='" + set + "'/>" );
+				writer.println( "\t<dataset id='" + dataSet + "'/>" );
 			}catch( Exception e ){
 				e.printStackTrace();
 			}
@@ -122,10 +114,8 @@ public class DataRequestFile extends File{
 				"format='" + format + "' " +
 				"path='" + r.getOutputDir() + File.separator + "' " +
 				"time='" + orientation + "'>" );
-			Iterator it = r.getFileFormat().getDataElements().iterator();
-			while( it.hasNext() ){
-				writer.println( "\t\t<option name='" +
-						(String)( it.next() ) + "'/>" );
+			for(String dataElement : r.getFileFormat().getDataElements()){
+				writer.println( "\t\t<option name='" + dataElement + "'/>" );
 			}
 			String [] files = r.getFileNames();
 			for( int i=0; i<files.length; i++ ){
