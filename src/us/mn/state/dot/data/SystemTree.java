@@ -21,7 +21,6 @@ package us.mn.state.dot.data;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -74,9 +73,7 @@ abstract public class SystemTree extends DefaultMutableTreeNode {
 	}
 	
 	protected final void addNodes(Set<SystemNode> set){
-		Iterator it = set.iterator();
-		while(it.hasNext()){
-			SystemNode n = (SystemNode)it.next();
+		for(SystemNode n : set){
 			add(n);
 			registerNode(n);
 		}

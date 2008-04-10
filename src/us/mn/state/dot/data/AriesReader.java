@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -76,26 +75,24 @@ public class AriesReader {
 				}
 				l = r.readLine();
 			}
-			Iterator it = zones.iterator();
 			w.write("<?xml version='1.0'?>\n");
 			Calendar c = Calendar.getInstance();
 			w.write("<arterials time_stamp='" +
 					formatter.format(c.getTime()) + "'>\n");
 			int detCount = 0;
-			while(it.hasNext()){
-				z = (Zone)it.next();
-				detCount = z.getDetectors();
+			for(Zone zone : zones){
+				detCount = zone.getDetectors();
 				if(detCount == 0){
 					continue;
 				}
-				System.out.println("Writing zone " + z.getIndex());
-				w.write("<zone index='" + z.getIndex() +
+				System.out.println("Writing zone " + zone.getIndex());
+				w.write("<zone index='" + zone.getIndex() +
 						"' label='" +
-						toXML(z.getLabel()) + "'>\n");
+						toXML(zone.getLabel()) + "'>\n");
 				for(int i=1; i<detCount+1; i++){
 					System.out.println("  writing det " + i);
 					w.write("\t<detector index='E" +
-							z.getIndex() + "_" + i +
+							zone.getIndex() + "_" + i +
 							"' label='Detector " + i +
 							"'/>\n");
 				}

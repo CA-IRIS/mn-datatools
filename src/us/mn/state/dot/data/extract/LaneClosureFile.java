@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 import us.mn.state.dot.data.Constants;
@@ -148,13 +147,10 @@ public class LaneClosureFile extends FileFormat {
 	}
 	
 	private DataSet[] getDataSets( int day, String detId ){
-		ArrayList dataSets = new ArrayList();
+		ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
 		String dataSet = ( (String)( request.getDataSets().toArray() )[ 0 ] );
-		Collection dates = filterCalendars( day, request.getDates() );
-		Iterator dateIterator = dates.iterator();
-		Calendar c = null;
-		while( dateIterator.hasNext() ) {
-			c = (Calendar)dateIterator.next();
+		Collection<Calendar> dates = filterCalendars( day, request.getDates() );
+		for(Calendar c : dates) {
 			if( c.get( Calendar.DAY_OF_WEEK ) == day ){
 				dataSets.add( request.getDataSet(
 					c, detId, dataSet ) );
@@ -166,12 +162,12 @@ public class LaneClosureFile extends FileFormat {
 	/** Get a subset of calendars where the day of week is
 	* the same as the filterDay
 	*/
-	private Collection filterCalendars( int filterDay, Collection cals ) {
+	private Collection<Calendar> filterCalendars( int filterDay, Collection<Calendar> cals ) {
 		Object[] calendars = cals.toArray();
-		Collection filtered = new Vector();
+		Collection<Calendar> filtered = new Vector<Calendar>();
 		for( int i=0; i<cals.size(); i++ ) {
 			if( ( (Calendar)calendars[ i ] ).get( Calendar.DAY_OF_WEEK ) == filterDay )
-				filtered.add( calendars[ i ] );
+				filtered.add( (Calendar)calendars[ i ] );
 		}
 		return filtered;
 	}

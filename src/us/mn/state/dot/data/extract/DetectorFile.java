@@ -20,7 +20,6 @@ package us.mn.state.dot.data.extract;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 
@@ -70,33 +69,17 @@ public class DetectorFile extends FileFormat {
 			PrintWriter writer ) {
 		String id = ( ( String ) fieldValue ).toUpperCase();
 		id = id.substring( 2 );
-		Collection dates = request.getDates();
-		Collection times = request.getTimeRanges();
-		Collection dataSets = request.getDataSets();
-		String dataSet = null;
-		Calendar c = null;
-		TimeRange range = null;
-		Iterator itCal = null;
-		Iterator itSet = null;
-		Iterator itRange = null;
-		itSet = dataSets.iterator();
-		while ( itSet.hasNext() ) {
-			dataSet = (String)itSet.next();
-			itCal = dates.iterator();
-			while ( itCal.hasNext() ) {
-				c = ( Calendar ) ( itCal.next() );
+		for(String dataSet : request.getDataSets()) {
+			for(Calendar c : request.getDates()) {
 				String d = formatter.format( c.getTime() );
-				itRange = times.iterator();
 				if ( dataElements.contains( OutputSelector.VALUES ) ||
 						dataElements.contains( OutputSelector.SUM ) ||
 						dataElements.contains( OutputSelector.AVERAGE ) ||
 						dataElements.contains( OutputSelector.TIME_MEDIAN ) ||
 						dataElements.contains( OutputSelector.SAMPLE ) ) {
 					writer.print( id + "," + dataSet + "," + d + "," );
-					while ( itRange.hasNext() ) {
-						range = ( TimeRange ) ( itRange.next() );
-						writeRowData(
-								writer, c, id, dataSet, range );
+					for(TimeRange range : request.getTimeRanges()) {
+						writeRowData(writer, c, id, dataSet, range);
 					}
 					writer.println();
 				}

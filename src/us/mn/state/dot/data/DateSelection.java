@@ -26,7 +26,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 import javax.swing.Box;
@@ -251,12 +250,10 @@ public final class DateSelection extends JPanel {
 
 	/** Deselect all dates */
 	public void clearAll() {
-		Iterator it = selected.iterator();
 		Calendar c = Calendar.getInstance();
-		while( it.hasNext() ) {
-			Date date = (Date)( it.next() );
-			c.setTime( date );
-			processDateRemovedEvent( c );
+		for(Date d : selected) {
+			c.setTime(d);
+			processDateRemovedEvent(c);
 		}
 		selected.clear();
 		initialize();
@@ -265,12 +262,10 @@ public final class DateSelection extends JPanel {
 	/** Get the current selection set */
 	public Calendar[] getSelectedDates() {
 		Calendar[] result = new Calendar[selected.size()];
-		Iterator it = selected.iterator();
 		int i=0;
-		while( it.hasNext() ) {
+		for(Date d : selected) {
 			Calendar c = Calendar.getInstance();
-			Date date = (Date)( it.next() );
-			c.setTime( date );
+			c.setTime(d);
 			result[i++] = c;
 		}
 		return result;
@@ -385,10 +380,9 @@ public final class DateSelection extends JPanel {
 		}
 		int y = month.get( Calendar.YEAR );
 		int m = month.get( Calendar.MONTH );
-		Iterator it = selected.iterator();
 		Calendar c = Calendar.getInstance();
-		while( it.hasNext() ) {
-			c.setTime( (Date)it.next() );
+		for(Date d : selected) {
+			c.setTime(d);
 			if( c.get( Calendar.YEAR ) == y ) {
 				if( c.get( Calendar.MONTH ) == m ) {
 					int day = c.get( Calendar.DATE ) - 1;

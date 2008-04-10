@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -96,10 +95,9 @@ public class DetectorSelector extends Selector
 
 	public String[] getSensorIds(){
 		String[] ids = new String[selectedNodes.size()];
-		Iterator it = selectedNodes.iterator();
 		int i=0;
-		while(it.hasNext()){
-			ids[i++] = ((SystemNode)it.next()).getId();
+		for(SystemNode node : selectedNodes){
+			ids[i++] = node.getId();
 		}
 		return ids;
 	}
@@ -388,10 +386,8 @@ public class DetectorSelector extends Selector
 			FileWriter fileWriter = new FileWriter( file );
 			BufferedWriter writer = new BufferedWriter( fileWriter );
 			SystemNode n = null;
-			Iterator it = selectedNodes.iterator();
-			while(it.hasNext()){
-				n = (SystemNode)it.next();
-				writer.write(n.getId());
+			for(SystemNode node : selectedNodes){
+				writer.write(node.getId());
 				writer.newLine();
 			}
 			writer.flush();
