@@ -36,7 +36,6 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,7 +46,6 @@ import us.mn.state.dot.data.Axis;
 import us.mn.state.dot.data.CSVDataFactory;
 import us.mn.state.dot.data.DataFactory;
 import us.mn.state.dot.data.DateSelection;
-import us.mn.state.dot.data.HttpDataFactory;
 import us.mn.state.dot.data.PlotDetector;
 import us.mn.state.dot.data.SingleDetector;
 

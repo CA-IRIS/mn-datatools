@@ -78,7 +78,6 @@ import us.mn.state.dot.data.DateSelection;
 import us.mn.state.dot.data.PlotData;
 import us.mn.state.dot.data.PlotDetector;
 import us.mn.state.dot.data.SingleDetector;
-import us.mn.state.dot.data.SystemConfig;
 
 /**
  * DataPlot

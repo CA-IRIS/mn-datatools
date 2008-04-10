@@ -18,14 +18,9 @@
  */
 package us.mn.state.dot.data.test;
 
-import java.net.URL;
 import java.util.Calendar;
 
-import us.mn.state.dot.data.HttpDataFactory;
 import us.mn.state.dot.data.PlotDetector;
-import us.mn.state.dot.data.Sensor;
-import us.mn.state.dot.data.SystemConfig;
-import us.mn.state.dot.data.TmsConfig;
 
 /**
  * @author john3tim

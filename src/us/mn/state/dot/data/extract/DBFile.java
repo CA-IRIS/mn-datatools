@@ -18,7 +18,6 @@
  */
 package us.mn.state.dot.data.extract;
 
-import java.awt.List;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
