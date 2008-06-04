@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
+import us.mn.state.dot.util.XmlWriter;
+
 /**
  * @author John3Tim
  *
@@ -88,7 +90,7 @@ public class AriesReader {
 				System.out.println("Writing zone " + zone.getIndex());
 				w.write("<zone index='" + zone.getIndex() +
 						"' label='" +
-						toXML(zone.getLabel()) + "'>\n");
+						XmlWriter.toXML(zone.getLabel()) + "'>\n");
 				for(int i=1; i<detCount+1; i++){
 					System.out.println("  writing det " + i);
 					w.write("\t<detector index='E" +
@@ -106,13 +108,6 @@ public class AriesReader {
 			e.printStackTrace();
 		}
 		
-	}
-
-	private String toXML(String s){
-		s = s.replaceAll("&", "&amp;");
-		s = s.replaceAll("<", "&lt;");
-		s = s.replaceAll(">", "&gt;");
-		return s;
 	}
 
 	private Zone createZone(String s){

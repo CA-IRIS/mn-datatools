@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import us.mn.state.dot.data.XmlParser;
+import us.mn.state.dot.util.XmlWriter;
 
 /**
  * @author John3Tim
@@ -112,7 +113,7 @@ public class DataRequestFile extends File{
 			String format = r.getFileFormat().toString().replaceAll( " ", "" );
 			writer.println( "\t<output " +
 				"format='" + format + "' " +
-				"path='" + r.getOutputDir() + File.separator + "' " +
+				"path='" + XmlWriter.toXML(r.getOutputDir().toString()) + File.separator + "' " +
 				"time='" + orientation + "'>" );
 			for(String dataElement : r.getFileFormat().getDataElements()){
 				writer.println( "\t\t<option name='" + dataElement + "'/>" );
