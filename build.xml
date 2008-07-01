@@ -93,7 +93,7 @@
 			</filterset>
 		</copy>
 		<copy todir="${build.docs.dir}" filtering="true">
-			<fileset dir="${docs.dir}" />
+			<fileset dir="${docs.dir}"/>
 			<filterset begintoken="@@" endtoken="@@">
 				<filter token="VERSION" value="${version}" />
 				<filter token="NAME" value="${name}" />
@@ -183,7 +183,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${build.dist.dir}/images">
-			<fileset dir="${build.docs.dir}/images">
+			<fileset dir="${docs.dir}/images">
 				<include name="*" />
 			</fileset>
 		</copy>
