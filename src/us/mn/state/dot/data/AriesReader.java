@@ -80,7 +80,7 @@ public class AriesReader {
 			w.write("<?xml version='1.0'?>\n");
 			Calendar c = Calendar.getInstance();
 			w.write("<arterials system='Arterials' time_stamp='" +
-					formatter.format(c.getTime()) + "'>\n");
+					formatter.format(c.getTime()) + "' detector_prefix='E' >\n");
 			int detCount = 0;
 			for(Zone zone : zones){
 				detCount = zone.getDetectors();
