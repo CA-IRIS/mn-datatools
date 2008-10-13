@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<arterials system='Arterials' time_stamp='Fri, 10 Oct 2008 13:14:33 CDT'>
+<arterials system='Arterials' time_stamp='Mon, 13 Oct 2008 09:22:35 CDT' detector_prefix='E' >
 <zone index='71' label='TH 5 &amp; (10)/(32) # WACONIA'>
 	<detector index='E71_1' label='Detector 1'/>
 	<detector index='E71_2' label='Detector 2'/>
