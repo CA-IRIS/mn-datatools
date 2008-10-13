@@ -79,12 +79,13 @@ public class AriesReader {
 			}
 			w.write("<?xml version='1.0'?>\n");
 			Calendar c = Calendar.getInstance();
-			w.write("<arterials time_stamp='" +
+			w.write("<arterials system='Arterials' time_stamp='" +
 					formatter.format(c.getTime()) + "'>\n");
 			int detCount = 0;
 			for(Zone zone : zones){
 				detCount = zone.getDetectors();
 				if(detCount == 0){
+					System.out.println("Skipping zone " + zone.index + ": no detectors");
 					continue;
 				}
 				System.out.println("Writing zone " + zone.getIndex());
@@ -139,7 +140,7 @@ public class AriesReader {
 	}
 
 	private int getDetectorCount(final int zoneId){
-		File v30Dir = new File("/tmp/20060926");
+		File v30Dir = new File("/tmp/20081008");
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return (name.toLowerCase().endsWith("v30") &&
