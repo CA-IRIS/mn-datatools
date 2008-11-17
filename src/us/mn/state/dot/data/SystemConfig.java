@@ -100,7 +100,11 @@ abstract public class SystemConfig {
 		ParserConfigurationException
 	{
 		XmlParser parser = new XmlParser(url);
+		if(parser == null)
+			return null;
 		Document doc = parser.getDocument();
+		if(doc == null)
+			return null;
 		Element root = doc.getDocumentElement();
 		String tag = root.getTagName();
 		if(tag.equals("tms_config"))

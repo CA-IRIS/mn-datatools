@@ -14,7 +14,9 @@
  */
 package us.mn.state.dot.data;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
@@ -27,6 +29,7 @@ import org.w3c.dom.Document;
  * Parser for GZIP'd xml files
  *
  * @author Tim Johnson, Doug Lau
+ * @author Michael Darter
  */
 public class XmlParser {
 
@@ -42,25 +45,39 @@ public class XmlParser {
 
 	/** Parse the XML document */
 	protected Document parse() throws ParserConfigurationException {
-		DocumentBuilder builder =
-			DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		DocumentBuilder builder = DocumentBuilderFactory.
+			newInstance().newDocumentBuilder();
+
+		// try to open gzip stream
 		try {
 			URLConnection conn = url.openConnection();
 			InputStream in = conn.getInputStream();
 			return builder.parse(new GZIPInputStream(in));
-		}
-		catch(Exception e) {
+		} catch(FileNotFoundException ex1) {
+			System.err.println("Warning: XmlParser.Parse(): "+ex1);
+			return null;
+		} catch(UnknownHostException ex2) {
+			System.err.println("Warning: XmlParser.Parse(): "+ex2);
+			return null;
+
+		// try to open as uncompressed stream
+		}catch(Exception ex3) {
 			try {
 				URLConnection conn = url.openConnection();
 				return builder.parse(conn.getInputStream());
-			}
-			catch(Exception e2) {
-				e2.printStackTrace();
+
+			// FIXME: probably shouldn't catch this
+			} catch(Exception ex4) {
+				System.err.println(
+					"XmlParser.Parse(): exception 4="+ex4);
+				ex4.printStackTrace();
 				return builder.newDocument();
 			}
 		}
 	}
 
+	/* return the document
+	 * @return null On failure */
 	public Document getDocument() {
 		return document;
 	}

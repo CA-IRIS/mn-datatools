@@ -18,6 +18,7 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Properties;
@@ -28,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * data from a data source.
  *
  * @author Douglas Lau
+ * @author Michael Darter
  */
 abstract public class DataFactory implements Constants, DateChecker {
 
@@ -35,21 +37,63 @@ abstract public class DataFactory implements Constants, DateChecker {
 	static public DataFactory create(Properties props) throws IOException,
 		ParserConfigurationException
 	{
-		String server = props.getProperty("datatools.trafdat.url");
-		String[] config = props.getProperty(
-			"datatools.config.url").split(",");
-		SystemConfig[] cfgs = new SystemConfig[config.length];
-		for(int i = 0; i < config.length; i++) {
-			URL url = new URL(config[i]);
-			cfgs[i] = SystemConfig.create(url);
-		}
+		if(props == null)
+			return null;
+
+		// get server url
+		String server = getProperty(props, 
+			"datatools.trafdat.url", "");
+
+		// get multiple config urls
+		SystemConfig[] cfgs = createSystemConfigs(props, 
+			"datatools.config.url");
+		if(cfgs == null)
+			return null;
+
+		// create data factory
 		return new HttpDataFactory(server, cfgs);
 	}
 
-	/** System configurations */
+	/** Create an array of SystemConfig objects. 
+	 *  @return Null on error or SystemConfig[], which may contain 
+	 *          elements that are null. */
+	static protected SystemConfig[] createSystemConfigs(
+		Properties props, String propname) 
+	{
+		String config_multi = getProperty(props, propname, "");
+		String[] config = config_multi.split(",");
+		if(config == null)
+			return null;
+
+		// may contain nulls
+		SystemConfig[] cfgs = new SystemConfig[config.length];	
+		for(int i = 0; i < config.length; i++)
+			cfgs[i] = createSystemConfig(config[i]);
+		return cfgs;
+	}
+
+	/** return a SystemConfig using the specified URL or null on error */
+	static protected SystemConfig createSystemConfig(String url_string) {
+		if(url_string == null || url_string.length() <= 0)
+			return null;
+		SystemConfig ret = null;
+		try {
+			URL url = new URL(url_string);
+			ret = SystemConfig.create(url);
+		}catch(MalformedURLException ex) {
+			System.err.println(
+				"Warning: bad property file URL: " + ex);
+		}catch(Exception ex) {
+			System.err.println(
+				"Warning: unknown exception: " + ex);
+		}
+		return ret;
+	}
+
+	/** System configurations, may contain nulls */
 	protected final SystemConfig[] configs;
 
-	/** Get the system configs */
+	/** Get the system configs, may contain nulls */
 	public SystemConfig[] getConfigs() {
 		return configs;
 	}
@@ -197,4 +241,38 @@ abstract public class DataFactory implements Constants, DateChecker {
 
 	/** Create a detector data object */
 	abstract public DetectorData createDetectorData( String id );
+
+	/** 
+	  * Read a property from the property file
+	  * @param pf Property file.
+	  * @param id Name of property to return.
+	  * @param def if id doesn't exist, the default string is returned. 
+	  */
+	//FIXME: this method is a duplicate of utils/get(). Would be nice have utils access in datatools.
+	static public String getProperty(Properties pf,String id,String def) {
+
+		// eliminate nulls
+		id=(id==null ? "" : id);
+		def=(def==null ? "" : def);
+
+		if (pf==null) {
+			System.err.println("Error: the property file is null");
+			return "";
+		}
+
+		String p=pf.getProperty(id);
+
+		// use default
+		if (p==null) {
+			p=def;
+			if (def.length()==0)
+				System.err.println("Warning: a property ("+id+
+					") was not found in the property file.");
+			else
+				System.err.println("Warning: a property ("+id+
+					") was not found in the property file, "+
+					"assigned the default value("+def+")");
+		}
+		return p;
+	}
 }
