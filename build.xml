@@ -18,6 +18,7 @@
 	<property file="${user.home}/.ant.properties" />
 	<property name="src.dir" value="src" />
 	<property name="etc.dir" value="etc" />
+	<property name="images.dir" value="images" />
 	<property name="lib.dir" value="lib" />
 	<property name="docs.dir" value="docs" />
  	<property name="spbase.dir" value="deps"/>
@@ -177,9 +178,7 @@
 			<fileset dir="${build.classes.dir}" includes="**/*.*" />
 			<fileset dir="${docs.dir}" includes="*.xml" />
 			<fileset dir="${docs.dir}" includes="*.dtd" />
-			<fileset dir="." includes="*.png" />
-			<fileset dir="." includes="*.gif" />
-			<fileset dir="src" includes="images/*.*" />
+			<fileset dir="${images.dir}" includes="*.*" />
 		</jar>
 	</target>
 
