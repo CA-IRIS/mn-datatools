@@ -1,8 +1,17 @@
 <?xml version="1.0"?>
 
-<!-- ============================================================ -->
-<!-- DataTools build file                                                   -->
-<!-- ============================================================ -->
+<!-- ant build file for datatools project
+     Copyright (C) 2005-2009  Minnesota Department of Transportation
+
+     This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.  -->
 
 <project name="DataTools" default="jar" basedir=".">
 	<property file="project.properties" />
@@ -11,7 +20,7 @@
 	<property name="etc.dir" value="etc" />
 	<property name="lib.dir" value="lib" />
 	<property name="docs.dir" value="docs" />
-	<property name="tms-log.jar" value="tms-log-${tms-log.version}.jar"/>
+ 	<property name="spbase.dir" value="deps"/>
 	<property name="build.dir" value="build" />
 	<property name="build.docs.dir" value="${build.dir}/docs" />
 	<property name="build.lib" value="${build.dir}/lib" />
@@ -19,13 +28,15 @@
 	<property name="build.etc.dir" value="${build.dir}/etc" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.javadocs.dir" value="${build.dir}/javadocs" />
-	<property name="build.dist.dir" value="${build.dir}/${name}-${version}" />
+	<property name="build.dist.dir"
+	          value="${build.dir}/${name}-${version}" />
 	<property name="TALK" value="true" />
 	<path id="classpath">
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
 	<property name="manifest" value="${etc.dir}/manifest.mf" />
 	<property name="build.compiler" value="modern" />
+	<property name="tms-log.jar" value="tms-log-${tms-log.version}.jar"/>
 
 	<!-- Check for one file dependancy -->
 	<target name="check-dep">
@@ -37,6 +48,7 @@
 
 	<!-- Check for dependancies -->
 	<target name="check">
+		<mkdir dir="${spbase.dir}"/>
 		<antcall target="check-dep">
 			<param name="file.dep" value="activation.jar" />
 		</antcall>
@@ -46,9 +58,45 @@
 		<antcall target="check-dep">
 			<param name="file.dep" value="jnlp.jar" />
 		</antcall>
-		<antcall target="check-dep">
+		<antcall target="check-subproject">
 			<param name="file.dep" value="${tms-log.jar}" />
+			<param name="repo.name" value="log"/>
+			<param name="repo.version"
+			       value="${tms-log.version}"/>
 		</antcall>
+	</target>
+
+	<!-- Check for one subproject dependancy -->
+	<target name="check-subproject">
+		<available property="file.exists"
+			   file="${lib.dir}/${file.dep}"/>
+		<antcall target="build-subproject"/>
+	</target>
+
+	<!-- Build a subproject -->
+	<target name="build-subproject" unless="file.exists">
+		<antcall target="hg-check"/>
+		<ant dir="${spbase.dir}/${repo.name}"
+		     target="jar" inheritAll="false"/>
+		<copy todir="${lib.dir}">
+			<fileset dir="${spbase.dir}/${repo.name}/build/lib/"/>
+		</copy>
+	</target>
+
+	<!-- Clone a mercurial subproject -->
+	<target name="hg-check" unless="file.exists">
+		<available property="dir.exists"
+		           file="${spbase.dir}/${repo.name}"/>
+		<antcall target="hg-clone"/>
+	</target>
+
+	<!-- Clone a mercurial subproject -->
+	<target name="hg-clone" unless="dir.exists">
+		<exec executable="hg" dir="${spbase.dir}" failonerror="true">
+			<arg value="clone"/>
+			<arg value="-r${repo.version}"/>
+			<arg value="${hgbase.url}${repo.name}"/>
+		</exec>
 	</target>
 
 	<!-- Check for unit test dependancies -->
@@ -58,9 +106,7 @@
 		</antcall>
 	</target>
 
-	<!-- ========================================================== -->
-	<!-- Prepares the build directory                                        -->
-	<!-- ========================================================== -->
+	<!-- Prepare the build directory -->
 	<target name="prepare" description="Creates the build directory.">
 		<echo>Application host: "${datatools.webstart.host}"</echo>
 		<echo>Data host:        "${datatools.trafdat.host}"</echo>
@@ -107,26 +153,27 @@
 		</copy>
 	</target>
 
-	<!-- ========================================================== -->
-	<!-- Compiles the source code                                            -->
-	<!-- ========================================================== -->
-	<target name="compile" depends="check,prepare" description="Compiles all of the source files for the project.">
+	<!-- Compile the source code -->
+	<target name="compile"
+	        depends="check,prepare"
+	        description="Compile all of the source files for the project.">
 		<javac destdir="${build.classes.dir}"
-			excludes="us/mn/state/dot/data/test/**"
-			debug="${debug}"
-			deprecation="on"
-			source="1.5"
-			target="1.5"
-			srcdir="${build.src.dir}">
+		       excludes="us/mn/state/dot/data/test/**"
+		       debug="${debug}"
+		       deprecation="on"
+		       source="1.5"
+		       target="1.5"
+		       srcdir="${build.src.dir}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
-	<!-- ========================================================== -->
-	<!-- Creates the jar archive                                             -->
-	<!-- ========================================================== -->
-	<target name="jar" depends="compile" description="Creates the jar file for the project.">
-		<jar jarfile="${build.lib}/${name}-${version}.jar" manifest="${build.etc.dir}/manifest.mf">
+	<!-- Create the jar archive -->
+	<target name="jar"
+	        depends="compile"
+	        description="Create the jar file for the project.">
+		<jar jarfile="${build.lib}/${name}-${version}.jar"
+		     manifest="${build.etc.dir}/manifest.mf">
 			<fileset dir="${build.classes.dir}" includes="**/*.*" />
 			<fileset dir="${docs.dir}" includes="*.xml" />
 			<fileset dir="${docs.dir}" includes="*.dtd" />
@@ -136,12 +183,20 @@
 		</jar>
 	</target>
 
-	<!-- ========================================================= -->
-	<!-- Creates the API documentation                                       -->
-	<!-- ========================================================= -->
-	<target name="javadocs" depends="prepare" description="Creates the javadocs for the project.">
-		<javadoc packagenames="${packages}" classpathref="classpath" sourcepath="${basedir}/${src.dir}" destdir="${build.javadocs}" author="true" version="true" windowtitle="${name} API" doctitle="${name}" bottom="Copyright &#169; Minnesota Department of
-				Transportation. All Rights Reserved." />
+	<!-- Create the API documentation -->
+	<target name="javadocs"
+	        depends="prepare"
+	        description="Creates the javadocs for the project.">
+		<javadoc packagenames="${packages}"
+		         classpathref="classpath"
+		         sourcepath="${basedir}/${src.dir}"
+		         destdir="${build.javadocs}"
+		         author="true"
+		         version="true"
+		         windowtitle="${name} API"
+		         doctitle="${name}"
+		         bottom="Copyright &#169; Minnesota Department of
+				Transportation."/>
 	</target>
 
 	<!-- Check for dependancies -->
@@ -154,9 +209,7 @@
 		</antcall>
 	</target>
 
-	<!-- ========================================================== -->
-	<!-- Creates the distribution                                            -->
-	<!-- ========================================================== -->
+	<!-- Create the distribution -->
 	<target name="dist" depends="check-dist,jar"
 	        description="Create the distribution directory and copy all
 			     needed files.">
@@ -193,53 +246,51 @@
 			</fileset>
 		</copy>
 		<chmod perm="+x" dir="${build.dist.dir}" includes="*.bat" />
-		<signjar keystore="${sign.store}" storepass="${sign.store.pass}" alias="${sign.alias}" keypass="${sign.alias.pass}" lazy="true">
+		<signjar keystore="${sign.store}"
+		         storepass="${sign.store.pass}"
+		         alias="${sign.alias}"
+		         keypass="${sign.alias.pass}"
+		         lazy="true">
 			<fileset dir="${build.dist.dir}/lib">
 				<include name="*.jar" />
 			</fileset>
 		</signjar>
-		<zip
-			basedir="."
-			destfile="${build.dir}/${name}-${version}.zip"
-			includes="${build.dist.dir}/**/*.*" />
+		<zip basedir="."
+		     destfile="${build.dir}/${name}-${version}.zip"
+		     includes="${build.dist.dir}/**/*.*" />
 	</target>
 
-
-	<!-- ========================================================= -->
-	<!-- Cleans up generated stuff                                           -->
-	<!-- ========================================================= -->
-	<target name="clean" description="deletes all compiled classes and the distribution
+	<!-- Clean up generated stuff -->
+	<target name="clean"
+	        description="delete all compiled classes and the distribution
                          directory.">
 		<delete dir="${build.dir}" />
 	</target>
 
-	<!-- ========================================================== -->
-	<!-- Compiles the source code including unit test classes       -->
-	<!-- ========================================================== -->
-	<target name="compile-test" depends="check-test,prepare"
-		description="Compiles all of the source files for the project.">
+	<!-- Compile the source code including unit test classes -->
+	<target name="compile-test"
+	        depends="check-test,prepare"
+	        description="Compiles all of the source files for the project.">
 		<javac destdir="${build.classes.dir}"
-			debug="off"
-			deprecation="on"
-			optimize="on"
-			source="1.5"
-			target="1.5"
-			srcdir="${build.src.dir}">
+		       debug="off"
+		       deprecation="on"
+		       optimize="on"
+		       source="1.5"
+		       target="1.5"
+		       srcdir="${build.src.dir}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
-	<!-- ========================================================= -->
-	<!-- run the unit tests                                        -->
-	<!-- ========================================================= -->
+	<!-- Run the unit tests -->
 	<target name="test" depends="compile-test">
 		<junit haltonfailure="true" printsummary="true">
 			<classpath refid="classpath"/>
 			<formatter type="brief" usefile="false" />
 			<batchtest>
-				<fileset dir="${build.classes.dir}" includes="**/*Tests.class" />
+				<fileset dir="${build.classes.dir}"
+				         includes="**/*Tests.class" />
 			</batchtest>
 		</junit>
 	</target>
-
 </project>
