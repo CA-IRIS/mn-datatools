@@ -13,10 +13,9 @@
        <offline/>
      </information>
      <resources>
-       <j2se version="1.5+"/>
+       <j2se version="1.6+"/>
        <jar href="lib/@@NAME@@-@@VERSION@@.jar"/>
        <jar href="lib/mail.jar"/>
-       <jar href="lib/activation.jar"/>
        <jar href="lib/@@TMSLOG.JAR@@"/>
      </resources>
      <security>

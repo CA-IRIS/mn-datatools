@@ -13,10 +13,9 @@
        <offline/>
      </information>
      <resources>
-       <j2se version="1.5+" initial-heap-size="32M" max-heap-size="128M"/>
+       <j2se version="1.6+" initial-heap-size="32M" max-heap-size="128M"/>
        <jar href="lib/@@NAME@@-@@VERSION@@.jar"/>
        <jar href="lib/mail.jar"/>
-       <jar href="lib/activation.jar"/>
        <jar href="lib/@@TMSLOG.JAR@@"/>
      </resources>
      <security>
