@@ -51,9 +51,6 @@
 	<target name="check">
 		<mkdir dir="${spbase.dir}"/>
 		<antcall target="check-dep">
-			<param name="file.dep" value="activation.jar" />
-		</antcall>
-		<antcall target="check-dep">
 			<param name="file.dep" value="mail.jar" />
 		</antcall>
 		<antcall target="check-dep">
